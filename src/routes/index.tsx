@@ -247,18 +247,38 @@ function VibeCodingPage() {
 
       // Big quote scale-in
       gsap.utils.toArray<HTMLElement>("[data-scale-in]").forEach((el) => {
-        gsap.from(el, {
-          scale: 0.85,
-          opacity: 0,
-          duration: 1.1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: el, start: "top 80%" },
-        });
+        gsap.fromTo(
+          el,
+          { scale: 0.85, opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 1.1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 95%", toggleActions: "play none none none" },
+          },
+        );
       });
     }, rootRef);
 
-    return () => ctx.revert();
+    // Recalculate triggers after images/fonts settle (pinned testimonial section
+    // changes total scroll height, which throws off earlier reveals).
+    const refresh = () => ScrollTrigger.refresh();
+    const t1 = window.setTimeout(refresh, 300);
+    const t2 = window.setTimeout(refresh, 1200);
+    window.addEventListener("load", refresh);
+    document.querySelectorAll("img").forEach((img) => {
+      if (!(img as HTMLImageElement).complete) img.addEventListener("load", refresh, { once: true });
+    });
+
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.removeEventListener("load", refresh);
+      ctx.revert();
+    };
   }, []);
+
 
   return (
     <div ref={rootRef} className="min-h-screen bg-background text-foreground overflow-x-hidden">
