@@ -378,9 +378,9 @@ function Hero() {
             </div>
 
             <div className="mt-10 flex flex-wrap gap-4" data-reveal>
-              <a href={REGISTER_URL} target="_blank" rel="noreferrer" className="btn-primary">
+              <LumaButton>
                 Reserve Your Seat <ArrowRight className="h-4 w-4" />
-              </a>
+              </LumaButton>
               <a href="#why-video" className="btn-secondary">
                 <Play className="h-4 w-4" /> Watch Why
               </a>
@@ -880,16 +880,16 @@ function EventDetails() {
               <div className="flex items-center gap-2 text-[color:var(--text-soft)] text-sm font-bold tracking-[0.2em] uppercase">
                 <Users className="h-4 w-4" /> Limited Seats · Interactive Workshop
               </div>
-              <h3 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight">
-                ₹₹₹₹₹ — <span className="gradient-text">Paid Event</span>
+              <h3 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight flex items-center gap-1">
+                <IndianRupee className="h-7 w-7" />2,999 <span className="text-[color:var(--text-soft)] text-xl font-bold ml-2">per seat</span>
               </h3>
               <p className="mt-3 text-[color:var(--text-muted)] max-w-xl">
-                Pricing will be communicated once the venue is confirmed. Location in Chennai will be shared with registered attendees.
+                Includes all materials, refreshments, and a certificate of completion. Venue in Chennai will be shared with registered attendees.
               </p>
             </div>
-            <a href={REGISTER_URL} target="_blank" rel="noreferrer" className="btn-primary self-start">
-              Register on Luma <ArrowRight className="h-4 w-4" />
-            </a>
+            <LumaButton className="btn-primary self-start">
+              Register Now <ArrowRight className="h-4 w-4" />
+            </LumaButton>
           </div>
         </div>
       </div>
@@ -916,9 +916,9 @@ function FinalCTA() {
             If you've ever wanted to build something meaningful with AI but weren't sure where to start — this is where you begin.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <a href={REGISTER_URL} target="_blank" rel="noreferrer" className="btn-primary">
+            <LumaButton>
               Reserve Your Seat <ArrowRight className="h-4 w-4" />
-            </a>
+            </LumaButton>
             <div className="flex items-center gap-2 text-[color:var(--text-soft)] text-sm">
               <MapPin className="h-4 w-4" /> Chennai, Tamil Nadu, India
             </div>
