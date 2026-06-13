@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -20,7 +20,69 @@ import {
   Linkedin,
   Mic,
   Quote,
+  IndianRupee,
 } from "lucide-react";
+import parallaxWorkshop from "@/assets/parallax-workshop.jpg";
+import parallaxAbstract from "@/assets/parallax-abstract.jpg";
+import parallaxHands from "@/assets/parallax-hands.jpg";
+
+const LUMA_EVENT_ID = "evt-MrNHUahHMbUuA6I";
+
+type LumaButtonProps = {
+  className?: string;
+  children: ReactNode;
+};
+
+function LumaButton({ className = "btn-primary", children }: LumaButtonProps) {
+  return (
+    <a
+      href={REGISTER_URL}
+      className={`luma-checkout--button ${className}`}
+      data-luma-action="checkout"
+      data-luma-event-id={LUMA_EVENT_ID}
+    >
+      {children}
+    </a>
+  );
+}
+
+function ParallaxImage({
+  src,
+  alt,
+  height = "h-[60vh]",
+  speed = "0.4",
+  caption,
+}: {
+  src: string;
+  alt: string;
+  height?: string;
+  speed?: string;
+  caption?: string;
+}) {
+  return (
+    <div className={`relative w-full ${height} overflow-hidden`}>
+      <div
+        data-parallax-img={speed}
+        className="absolute inset-0 -top-[20%] -bottom-[20%]"
+      >
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
+      </div>
+      {caption && (
+        <div className="absolute bottom-10 left-0 right-0 vc-container">
+          <p className="text-2xl md:text-4xl font-extrabold tracking-tight max-w-2xl gradient-text">
+            {caption}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,6 +110,17 @@ const REGISTER_URL = "https://luma.com/event/evt-MrNHUahHMbUuA6I";
 function VibeCodingPage() {
   const rootRef = useRef<HTMLDivElement>(null);
 
+  // Inject Luma checkout script once
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (document.getElementById("luma-checkout")) return;
+    const s = document.createElement("script");
+    s.id = "luma-checkout";
+    s.src = "https://embed.lu.ma/checkout-button.js";
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
@@ -64,6 +137,25 @@ function VibeCodingPage() {
             scrub: true,
           },
         });
+      });
+
+      // Parallax images (move slower than scroll for depth)
+      gsap.utils.toArray<HTMLElement>("[data-parallax-img]").forEach((el) => {
+        const speed = parseFloat(el.dataset.parallaxImg || "0.4");
+        gsap.fromTo(
+          el,
+          { yPercent: -speed * 30 },
+          {
+            yPercent: speed * 30,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el.parentElement,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
+        );
       });
 
       // Fade-up reveals
