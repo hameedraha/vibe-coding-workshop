@@ -1055,7 +1055,7 @@ function Pricing() {
     "Light snacks & refreshments",
   ];
   return (
-    <section className="section-pad relative overflow-hidden">
+    <section className="section-pad relative">
       <div
         data-parallax="0.3"
         className="absolute top-10 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full pointer-events-none"
@@ -1074,8 +1074,8 @@ function Pricing() {
 
         <div data-scale-in className="relative max-w-3xl mx-auto">
           <div className="absolute -inset-8 rounded-[44px] gradient-bg opacity-30 blur-3xl" />
-          <ElectricBorder color="#C88BEF" speed={0.9} chaos={0.5} borderRadius={28} className="relative">
-            <div className="relative glass-card p-10 md:p-14 text-center" style={{ borderRadius: 28 }}>
+          <ElectricBorder color="#C88BEF" speed={0.9} chaos={0.35} borderRadius={32} className="relative" style={{ padding: 14 }}>
+            <div className="relative glass-card p-10 md:p-14 text-center" style={{ borderRadius: 22 }}>
             <div className="text-xs font-bold tracking-[0.3em] uppercase text-[color:var(--text-soft)]">
               General Admission
             </div>
