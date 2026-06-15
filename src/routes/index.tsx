@@ -609,7 +609,9 @@ function Speakers() {
               className="glass-card p-8 flex flex-col hover:-translate-y-2 transition-transform duration-500"
             >
               <div className="flex items-center gap-4">
-                <div className={`avatar-ring ${s.ring} !ml-0 !w-16 !h-16 text-xl`}>{s.initial}</div>
+                <div className={`avatar-ring ${s.ring} !ml-0 !w-16 !h-16 !p-0 overflow-hidden`}>
+                  <img src={s.photo} alt={s.name} className="w-full h-full object-cover rounded-full" />
+                </div>
                 <div className="flex-1">
                   <div className="text-xs font-bold tracking-[0.2em] uppercase text-[color:var(--text-soft)]">
                     {s.role}
