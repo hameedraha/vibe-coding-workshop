@@ -37,7 +37,7 @@ const D = ({ text, className = "" }: { text: string; className?: string }) => (
     animateOn="view"
     sequential
     revealDirection="start"
-    speed={28}
+    speed={75}
     useOriginalCharsOnly={false}
     parentClassName={className}
   />
