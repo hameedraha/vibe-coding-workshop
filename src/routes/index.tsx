@@ -28,20 +28,9 @@ import parallaxHands from "@/assets/parallax-hands.jpg";
 import hameedPhoto from "@/assets/hameed.jpeg.asset.json";
 import hariPhoto from "@/assets/hari.png.asset.json";
 import leoPhoto from "@/assets/leo.jpeg.asset.json";
-import DecryptedText from "@/components/DecryptedText";
+// Decode-reveal removed — render plain text
+const D = ({ text }: { text: string; className?: string }) => <>{text}</>;
 
-// Scroll-triggered decoded-text reveal — shared default props
-const D = ({ text, className = "" }: { text: string; className?: string }) => (
-  <DecryptedText
-    text={text}
-    animateOn="view"
-    sequential
-    revealDirection="start"
-    speed={75}
-    useOriginalCharsOnly={false}
-    parentClassName={className}
-  />
-);
 
 const LUMA_EVENT_ID = "evt-MrNHUahHMbUuA6I";
 
