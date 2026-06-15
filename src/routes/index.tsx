@@ -536,7 +536,7 @@ function WhatYouLearn() {
               <div className="h-11 w-11 rounded-xl gradient-bg flex items-center justify-center text-[#050505]">
                 <b.icon className="h-5 w-5" strokeWidth={2.5} />
               </div>
-              <h3 className="mt-5 text-xl font-bold">{b.title}</h3>
+              <h3 className="mt-5 text-xl font-bold"><D text={b.title} /></h3>
               <p className="mt-2 text-[color:var(--text-soft)] leading-relaxed">{b.desc}</p>
             </div>
           ))}
