@@ -880,7 +880,7 @@ function Audience() {
           <div className="glass-card p-8" data-stagger-item>
             <div className="flex items-center gap-3 mb-6">
               <span className="text-2xl">🤩</span>
-              <h3 className="text-2xl font-extrabold">Who should attend</h3>
+              <h3 className="text-2xl font-extrabold"><D text="Who should attend" /></h3>
             </div>
             <ul className="grid sm:grid-cols-2 gap-3">
               {yes.map((y) => (
