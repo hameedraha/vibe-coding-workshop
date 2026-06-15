@@ -28,6 +28,20 @@ import parallaxHands from "@/assets/parallax-hands.jpg";
 import hameedPhoto from "@/assets/hameed.jpeg.asset.json";
 import hariPhoto from "@/assets/hari.png.asset.json";
 import leoPhoto from "@/assets/leo.jpeg.asset.json";
+import DecryptedText from "@/components/DecryptedText";
+
+// Scroll-triggered decoded-text reveal — shared default props
+const D = ({ text, className = "" }: { text: string; className?: string }) => (
+  <DecryptedText
+    text={text}
+    animateOn="view"
+    sequential
+    revealDirection="start"
+    speed={28}
+    useOriginalCharsOnly={false}
+    parentClassName={className}
+  />
+);
 
 const LUMA_EVENT_ID = "evt-MrNHUahHMbUuA6I";
 
@@ -358,10 +372,10 @@ function Hero() {
               data-hero-title
               className="font-display uppercase tracking-tight font-extrabold leading-[0.88] text-[clamp(56px,9vw,120px)]"
             >
-              <span data-hero-line className="block gradient-text">AI Vibe</span>
-              <span data-hero-line className="block font-light text-[#EDEDF5]">Coding</span>
+              <span data-hero-line className="block gradient-text"><D text="AI Vibe" /></span>
+              <span data-hero-line className="block font-light text-[#EDEDF5]"><D text="Coding" /></span>
               <span data-hero-line className="block text-[0.42em] tracking-tight mt-4 text-white">
-                THE <span className="underline-word">RIGHT</span> WAY
+                <D text="THE " /><span className="underline-word"><D text="RIGHT" /></span><D text=" WAY" />
               </span>
             </h1>
 
@@ -441,7 +455,7 @@ function WhyVideo() {
         <div className="text-center max-w-2xl mx-auto mb-12" data-reveal>
           <span className="badge-orange mb-4">Watch first · 2 min</span>
           <h2 className="mt-5 text-4xl md:text-6xl font-extrabold tracking-tight">
-            Why <span className="gradient-text">this workshop</span> exists.
+            <D text="Why " /><span className="gradient-text"><D text="this workshop" /></span><D text=" exists." />
           </h2>
           <p className="mt-4 text-[color:var(--text-muted)] text-lg">
             The honest reason we're running this — straight from the instructors.
@@ -475,7 +489,7 @@ function WhyMatters() {
             Why this workshop
           </span>
           <h2 className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
-            Everyone is building apps. <span className="gradient-text">Very few are building products people actually want.</span>
+            <D text="Everyone is building apps. " /><span className="gradient-text"><D text="Very few are building products people actually want." /></span>
           </h2>
           <div className="mt-8 space-y-5 text-lg text-[color:var(--text-muted)] leading-relaxed">
             <p>Most people start with the tool. The best builders start with the problem.</p>
@@ -510,7 +524,7 @@ function WhatYouLearn() {
       <div className="vc-container relative">
         <div className="text-center max-w-2xl mx-auto mb-14" data-reveal>
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            What you'll <span className="gradient-text">walk away with</span>
+            <D text="What you'll " /><span className="gradient-text"><D text="walk away with" /></span>
           </h2>
           <p className="mt-4 text-[color:var(--text-muted)] text-lg">
             Four hours. One end-to-end product playbook.
@@ -522,7 +536,7 @@ function WhatYouLearn() {
               <div className="h-11 w-11 rounded-xl gradient-bg flex items-center justify-center text-[#050505]">
                 <b.icon className="h-5 w-5" strokeWidth={2.5} />
               </div>
-              <h3 className="mt-5 text-xl font-bold">{b.title}</h3>
+              <h3 className="mt-5 text-xl font-bold"><D text={b.title} /></h3>
               <p className="mt-2 text-[color:var(--text-soft)] leading-relaxed">{b.desc}</p>
             </div>
           ))}
@@ -595,7 +609,7 @@ function Speakers() {
         <div className="max-w-2xl mb-14" data-reveal>
           <span className="badge-orange mb-4">Meet the instructors</span>
           <h2 className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
-            Three builders. <span className="gradient-text">One complete playbook.</span>
+            <D text="Three builders. " /><span className="gradient-text"><D text="One complete playbook." /></span>
           </h2>
           <p className="mt-4 text-[color:var(--text-muted)] text-lg">
             Listen to each instructor's podcast to get a feel for how they think — then come build with them.
@@ -629,7 +643,7 @@ function Speakers() {
                 </a>
               </div>
 
-              <h3 className="mt-6 text-lg font-bold gradient-text">{s.tagline}</h3>
+              <h3 className="mt-6 text-lg font-bold gradient-text"><D text={s.tagline} /></h3>
               <p className="mt-2 text-sm text-[color:var(--text-soft)] leading-relaxed">{s.bio}</p>
 
               <ul className="mt-5 space-y-2.5">
@@ -749,7 +763,7 @@ function Testimonials() {
       <div className="vc-container relative z-10 pt-24 pb-10">
         <span className="badge-orange mb-4">Real builders. Real outcomes.</span>
         <h2 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight max-w-3xl">
-          They came to build. <span className="gradient-text">They left shipping.</span>
+          <D text="They came to build. " /><span className="gradient-text"><D text="They left shipping." /></span>
         </h2>
         <p className="mt-4 text-[color:var(--text-muted)] text-lg max-w-2xl">
           A wall of receipts from past attendees — scrolling forever, because the list keeps growing.
@@ -866,7 +880,7 @@ function Audience() {
           <div className="glass-card p-8" data-stagger-item>
             <div className="flex items-center gap-3 mb-6">
               <span className="text-2xl">🤩</span>
-              <h3 className="text-2xl font-extrabold">Who should attend</h3>
+              <h3 className="text-2xl font-extrabold"><D text="Who should attend" /></h3>
             </div>
             <ul className="grid sm:grid-cols-2 gap-3">
               {yes.map((y) => (
@@ -880,7 +894,7 @@ function Audience() {
           <div className="glass-card p-8" data-stagger-item>
             <div className="flex items-center gap-3 mb-6">
               <span className="text-2xl">🤦‍♂️</span>
-              <h3 className="text-2xl font-extrabold">Who should NOT attend</h3>
+              <h3 className="text-2xl font-extrabold"><D text="Who should NOT attend" /></h3>
             </div>
             <ul className="space-y-3">
               {no.map((n) => (
@@ -924,7 +938,7 @@ function TakeHome() {
               What you'll take home
             </span>
             <h3 className="mt-3 text-3xl font-extrabold">
-              Tools you'll <span className="gradient-text">actually use</span>.
+              <D text="Tools you'll " /><span className="gradient-text"><D text="actually use" /></span><D text="." />
             </h3>
             <ul className="mt-6 space-y-3.5" data-stagger>
               {items.map((i) => (
@@ -950,7 +964,7 @@ function EventDetails() {
         <div className="text-center max-w-2xl mx-auto mb-14" data-reveal>
           <span className="badge-orange mb-4">Event Details</span>
           <h2 className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
-            The <span className="gradient-text">essentials</span>
+            <D text="The " /><span className="gradient-text"><D text="essentials" /></span>
           </h2>
         </div>
 
@@ -1005,9 +1019,9 @@ function FinalCTA() {
       <div className="vc-container relative">
         <div className="max-w-3xl" data-reveal>
           <h2 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[0.95]">
-            <span className="block">Build the right thing.</span>
-            <span className="block gradient-text">Build it the right way.</span>
-            <span className="block">Take it to the right people.</span>
+            <span className="block"><D text="Build the right thing." /></span>
+            <span className="block gradient-text"><D text="Build it the right way." /></span>
+            <span className="block"><D text="Take it to the right people." /></span>
           </h2>
           <p className="mt-8 text-xl text-[color:var(--text-muted)] max-w-2xl">
             If you've ever wanted to build something meaningful with AI but weren't sure where to start — this is where you begin.
@@ -1060,7 +1074,7 @@ function Pricing() {
         <div className="text-center max-w-2xl mx-auto mb-12" data-reveal>
           <span className="badge-orange mb-4">One ticket. Everything in.</span>
           <h2 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight">
-            Worth it for <span className="gradient-text">one prompt</span>.
+            <D text="Worth it for " /><span className="gradient-text"><D text="one prompt" /></span><D text="." />
           </h2>
           <p className="mt-4 text-[color:var(--text-muted)] text-lg">
             We kept it simple. One price, one room, everything included.
