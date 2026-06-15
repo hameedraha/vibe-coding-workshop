@@ -28,6 +28,8 @@ import parallaxHands from "@/assets/parallax-hands.jpg";
 import hameedPhoto from "@/assets/hameed.jpeg.asset.json";
 import hariPhoto from "@/assets/hari.png.asset.json";
 import leoPhoto from "@/assets/leo.jpeg.asset.json";
+import ElectricBorder from "@/components/ElectricBorder";
+
 // Decode-reveal removed — render plain text
 const D = ({ text }: { text: string; className?: string }) => <>{text}</>;
 
