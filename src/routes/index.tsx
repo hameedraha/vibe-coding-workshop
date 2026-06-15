@@ -25,6 +25,9 @@ import {
 import parallaxWorkshop from "@/assets/parallax-workshop.jpg";
 import parallaxAbstract from "@/assets/parallax-abstract.jpg";
 import parallaxHands from "@/assets/parallax-hands.jpg";
+import hameedPhoto from "@/assets/hameed.jpeg.asset.json";
+import hariPhoto from "@/assets/hari.png.asset.json";
+import leoPhoto from "@/assets/leo.jpeg.asset.json";
 
 const LUMA_EVENT_ID = "evt-MrNHUahHMbUuA6I";
 
