@@ -1074,8 +1074,8 @@ function Pricing() {
 
         <div data-scale-in className="relative max-w-3xl mx-auto">
           <div className="absolute -inset-8 rounded-[44px] gradient-bg opacity-30 blur-3xl" />
-          <ElectricBorder color="#C88BEF" speed={0.9} chaos={0.5} borderRadius={28} className="relative">
-            <div className="relative glass-card p-10 md:p-14 text-center" style={{ borderRadius: 28 }}>
+          <ElectricBorder color="#C88BEF" speed={0.9} chaos={0.35} borderRadius={32} className="relative" style={{ padding: 14 }}>
+            <div className="relative glass-card p-10 md:p-14 text-center" style={{ borderRadius: 22 }}>
             <div className="text-xs font-bold tracking-[0.3em] uppercase text-[color:var(--text-soft)]">
               General Admission
             </div>
