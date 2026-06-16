@@ -13,7 +13,7 @@ import gsap from "gsap";
 import { ArrowLeft, ArrowRight, CreditCard, IndianRupee, Loader2, ShieldAlert, X } from "lucide-react";
 
 import { completeReservation, createRazorpayOrder } from "@/lib/api/reservation.functions";
-import { openRazorpayCheckout } from "@/lib/razorpay.client";
+import { openRazorpayCheckout } from "@/lib/razorpay";
 import {
   PAYMENT_NOTE,
   TERMS_AND_CONDITIONS,
