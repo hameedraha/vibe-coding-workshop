@@ -1,44 +1,48 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import Link from "next/link";
 
 import { ThankYouConfirmation } from "@/components/thank-you/ThankYouConfirmation";
+import {
+  CONFIRMATION_COOKIE_NAME,
+  decodeConfirmationCookie,
+} from "@/lib/confirmation-cookie.server";
 
-type ThankYouPageProps = {
-  searchParams: Promise<{
-    name?: string;
-    email?: string;
-    phone?: string;
-    ref?: string;
-    payment?: string;
-    experience?: string;
-    linkedin?: string;
-  }>;
-};
+export const dynamic = "force-dynamic";
 
-export default async function ThankYouPage({ searchParams }: ThankYouPageProps) {
-  const params = await searchParams;
+export default async function ThankYouPage() {
+  const cookieStore = await cookies();
+  const confirmation = decodeConfirmationCookie(cookieStore.get(CONFIRMATION_COOKIE_NAME)?.value);
 
-  if (!params.name || !params.email || !params.phone || !params.ref || !params.payment) {
+  if (!confirmation) {
     redirect("/");
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+      <div className="hero-bg absolute inset-0 pointer-events-none" />
+      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(200,139,239,0.15), transparent 65%)" }}
+        className="pointer-events-none absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(200,139,239,0.2), transparent 70%)" }}
       />
-      <div className="vc-container relative flex min-h-screen items-center justify-center py-24">
-        <ThankYouConfirmation
-          name={params.name}
-          email={params.email}
-          phone={params.phone}
-          referenceId={params.ref}
-          paymentId={params.payment}
-          experience={params.experience}
-          linkedin={params.linkedin}
-        />
-      </div>
+
+      <header className="relative border-b border-white/10">
+        <div className="vc-container flex h-16 items-center justify-between">
+          <Link href="/" className="text-sm font-bold tracking-[0.18em] uppercase text-white/80">
+            Vibe Coding
+          </Link>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--text-soft)]">
+            Confirmation
+          </span>
+        </div>
+      </header>
+
+      <main className="relative">
+        <div className="vc-container py-12 md:py-16 lg:py-20">
+          <ThankYouConfirmation confirmation={confirmation} />
+        </div>
+      </main>
     </div>
   );
 }

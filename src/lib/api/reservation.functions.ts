@@ -31,19 +31,8 @@ export async function createRazorpayOrder({ data }: { data: unknown }) {
 
 export async function completeReservation({ data }: { data: unknown }) {
   const parsed = completeReservationFields.parse(data);
-  return postJson<
-    typeof parsed,
-    {
-      ok: true;
-      referenceId: string;
-      paymentId: string;
-      confirmation: {
-        name: string;
-        email: string;
-        phone: string;
-        linkedin: string;
-        experience: string;
-      };
-    }
-  >("/api/reservation/complete", parsed);
+  return postJson<typeof parsed, { ok: true; confirmationId: string }>(
+    "/api/reservation/complete",
+    parsed,
+  );
 }

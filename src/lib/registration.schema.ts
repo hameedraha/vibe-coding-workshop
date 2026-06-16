@@ -10,10 +10,8 @@ const experienceValues = VIBE_EXPERIENCE_OPTIONS.map((o) => o.value) as [
 export const linkedinField = z
   .string()
   .trim()
-  .default("")
-  .refine((value) => !value || z.string().url().safeParse(value).success, {
-    message: "Enter a valid LinkedIn URL",
-  });
+  .min(1, "LinkedIn URL is required")
+  .url("Enter a valid LinkedIn URL");
 
 export const registrationFields = z.object({
   name: z.string().trim().min(2, "Name is required"),

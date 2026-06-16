@@ -6,6 +6,7 @@ import leoPhoto from "@/assets/leo.jpeg";
 import { HERO_MARQUEE_ITEMS } from "@/components/landing/data";
 import { D } from "@/components/landing/utils";
 import { ReserveSeatButton } from "@/components/ReservationWizard";
+import ScrollVelocity from "@/components/ui/scroll-velocity";
 
 export function Hero() {
   return (
@@ -91,12 +92,12 @@ export function Hero() {
         </div>
       </div>
       <div className="relative mt-20 overflow-hidden border-y border-white/10 py-5 bg-black/40">
-        <div
-          data-marquee-inner
-          className="flex gap-12 whitespace-nowrap text-2xl md:text-3xl font-extrabold uppercase tracking-tight"
-        >
-          {Array.from({ length: 2 }).map((_, k) => (
-            <div key={k} className="flex gap-12 shrink-0">
+        <ScrollVelocity
+          velocity={50}
+          numCopies={4}
+          className="inline-flex items-center gap-12 text-2xl md:text-3xl font-extrabold uppercase tracking-tight"
+          texts={[
+            <>
               {HERO_MARQUEE_ITEMS.map((item, i) => (
                 <span
                   key={`${item}-${i}`}
@@ -105,9 +106,9 @@ export function Hero() {
                   {item}
                 </span>
               ))}
-            </div>
-          ))}
-        </div>
+            </>,
+          ]}
+        />
       </div>
     </section>
   );

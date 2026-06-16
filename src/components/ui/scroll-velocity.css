@@ -1,0 +1,15 @@
+.scroll-velocity-parallax {
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-velocity-scroller {
+  display: flex;
+  white-space: nowrap;
+  text-align: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+}
+
+.scroll-velocity-scroller span {
+  flex-shrink: 0;
+}

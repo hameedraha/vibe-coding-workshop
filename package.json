@@ -1,11 +1,11 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
-  "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "clean": "node scripts/clean-next.mjs",
+    "dev": "node scripts/next-dev.mjs",
+    "build": "node scripts/next-build.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

@@ -23,7 +23,6 @@ import {
 import { completeReservation, createRazorpayOrder } from "@/lib/api/reservation.functions";
 import { openRazorpayCheckout } from "@/lib/razorpay";
 import {
-  PAYMENT_NOTE,
   TERMS_AND_CONDITIONS,
   TICKET_PRICE_INR,
   VIBE_EXPERIENCE_OPTIONS,
@@ -120,6 +119,8 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorHighlight, setErrorHighlight] = useState(false);
+  const errorHighlightTimeoutRef = useRef<number | undefined>(undefined);
   const [stepOne, setStepOne] = useState<StepOneData>({
     name: "",
     email: "",
@@ -133,9 +134,30 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
     setStep(1);
     setSubmitting(false);
     setError(null);
+    setErrorHighlight(false);
+    window.clearTimeout(errorHighlightTimeoutRef.current);
     setStepOne({ name: "", email: "", phone: "", linkedin: "", experience: "" });
     setAcceptedTerms(false);
     closingRef.current = false;
+  }, []);
+
+  const clearError = useCallback(() => {
+    setError(null);
+    setErrorHighlight(false);
+    window.clearTimeout(errorHighlightTimeoutRef.current);
+  }, []);
+
+  const showValidationError = useCallback((message: string) => {
+    setError(message);
+    setErrorHighlight(false);
+    window.clearTimeout(errorHighlightTimeoutRef.current);
+
+    requestAnimationFrame(() => {
+      setErrorHighlight(true);
+      errorHighlightTimeoutRef.current = window.setTimeout(() => {
+        setErrorHighlight(false);
+      }, 520);
+    });
   }, []);
 
   const handleClose = useCallback(() => {
@@ -202,7 +224,8 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
       return "Please enter a valid email.";
     if (!/^[+\d\s-]{10,15}$/.test(stepOne.phone.trim()))
       return "Please enter a valid phone number.";
-    if (stepOne.linkedin.trim() && !/^https?:\/\/.+/i.test(stepOne.linkedin.trim())) {
+    if (!stepOne.linkedin.trim()) return "Please enter your LinkedIn profile URL.";
+    if (!/^https?:\/\/.+/i.test(stepOne.linkedin.trim())) {
       return "Please enter a valid LinkedIn URL.";
     }
     if (!stepOne.experience) return "Please select your vibe coding experience.";
@@ -213,29 +236,29 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
     e.preventDefault();
     const message = validateStepOne();
     if (message) {
-      setError(message);
+      showValidationError(message);
       return;
     }
-    setError(null);
+    clearError();
     setStep(2);
   };
 
   const handlePayWithRazorpay = async (e: FormEvent) => {
     e.preventDefault();
     if (!acceptedTerms) {
-      setError("Please accept the terms and conditions.");
+      showValidationError("Please accept the terms and conditions.");
       return;
     }
 
     const message = validateStepOne();
     if (message) {
-      setError(message);
+      showValidationError(message);
       setStep(1);
       return;
     }
 
     setSubmitting(true);
-    setError(null);
+    clearError();
 
     const registration = {
       name: stepOne.name.trim(),
@@ -269,29 +292,26 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
               },
             });
 
+            if (!result.ok) {
+              throw new Error("Confirmation failed");
+            }
+
             closingRef.current = true;
             onOpenChange(false);
             reset();
-            const params = new URLSearchParams({
-              name: result.confirmation.name,
-              email: result.confirmation.email,
-              phone: result.confirmation.phone,
-              ref: result.referenceId,
-              payment: result.paymentId,
-              experience: result.confirmation.experience,
-            });
-            if (result.confirmation.linkedin) {
-              params.set("linkedin", result.confirmation.linkedin);
-            }
-            router.push(`/thank-you?${params.toString()}`);
+            router.push("/thank-you");
           } catch {
-            setError("Payment received but confirmation failed. Contact us with your payment ID.");
+            showValidationError(
+              "Payment received but confirmation failed. Contact us with your payment ID.",
+            );
             setSubmitting(false);
           }
         },
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to start payment. Please try again.");
+      showValidationError(
+        err instanceof Error ? err.message : "Unable to start payment. Please try again.",
+      );
       setSubmitting(false);
     }
   };
@@ -312,7 +332,9 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="reservation-title"
-        className="relative z-10 flex max-h-[94vh] w-full max-w-xl flex-col overflow-hidden rounded-t-[28px] border border-white/10 bg-[#0c0c10] shadow-[0_40px_120px_rgba(0,0,0,0.65)] sm:rounded-[28px]"
+        className={`relative z-10 flex max-h-[94vh] w-full max-w-xl flex-col overflow-hidden rounded-t-[28px] border bg-[#0c0c10] shadow-[0_40px_120px_rgba(0,0,0,0.65)] transition-[border-color,box-shadow] duration-300 sm:rounded-[28px] ${
+          errorHighlight ? "reservation-panel--error" : "border-white/10"
+        }`}
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
           <div>
@@ -334,7 +356,7 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
           </button>
         </div>
 
-        <div ref={stepContentRef} className="overflow-y-auto px-6 py-6">
+        <div ref={stepContentRef} className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
           {step === 1 ? (
             <form id="reservation-step-one" onSubmit={handleStepOneSubmit} className="space-y-5">
               <div className="space-y-2">
@@ -342,7 +364,10 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                 <input
                   id="res-name"
                   value={stepOne.name}
-                  onChange={(e) => setStepOne((s) => ({ ...s, name: e.target.value }))}
+                  onChange={(e) => {
+                    clearError();
+                    setStepOne((s) => ({ ...s, name: e.target.value }));
+                  }}
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition focus:border-[#C88BEF]/60"
                   placeholder="Your name"
                   autoComplete="name"
@@ -355,7 +380,10 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                   id="res-email"
                   type="email"
                   value={stepOne.email}
-                  onChange={(e) => setStepOne((s) => ({ ...s, email: e.target.value }))}
+                  onChange={(e) => {
+                    clearError();
+                    setStepOne((s) => ({ ...s, email: e.target.value }));
+                  }}
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition focus:border-[#C88BEF]/60"
                   placeholder="you@email.com"
                   autoComplete="email"
@@ -368,7 +396,10 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                   id="res-phone"
                   type="tel"
                   value={stepOne.phone}
-                  onChange={(e) => setStepOne((s) => ({ ...s, phone: e.target.value }))}
+                  onChange={(e) => {
+                    clearError();
+                    setStepOne((s) => ({ ...s, phone: e.target.value }));
+                  }}
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition focus:border-[#C88BEF]/60"
                   placeholder="+91 98765 43210"
                   autoComplete="tel"
@@ -376,15 +407,19 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="res-linkedin">LinkedIn profile (optional)</Label>
+                <Label htmlFor="res-linkedin">LinkedIn profile</Label>
                 <input
                   id="res-linkedin"
                   type="url"
                   value={stepOne.linkedin}
-                  onChange={(e) => setStepOne((s) => ({ ...s, linkedin: e.target.value }))}
+                  onChange={(e) => {
+                    clearError();
+                    setStepOne((s) => ({ ...s, linkedin: e.target.value }));
+                  }}
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition focus:border-[#C88BEF]/60"
                   placeholder="https://linkedin.com/in/you"
                   autoComplete="url"
+                  required
                 />
               </div>
 
@@ -392,9 +427,10 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                 <Label htmlFor="res-experience">Vibe coding experience</Label>
                 <Select
                   value={stepOne.experience || undefined}
-                  onValueChange={(value) =>
-                    setStepOne((s) => ({ ...s, experience: value as VibeExperience }))
-                  }
+                  onValueChange={(value) => {
+                    clearError();
+                    setStepOne((s) => ({ ...s, experience: value as VibeExperience }));
+                  }}
                 >
                   <SelectTrigger
                     id="res-experience"
@@ -417,110 +453,144 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
               </div>
             </form>
           ) : (
-            <form id="reservation-step-two" onSubmit={handlePayWithRazorpay} className="space-y-5">
-              <div className="rounded-2xl border border-[#C88BEF]/30 bg-[#C88BEF]/10 p-4">
-                <div className="flex items-start gap-2 text-sm font-bold uppercase tracking-[0.2em] text-[#C88BEF]">
-                  <ShieldAlert className="h-4 w-4 shrink-0" />
-                  Important
+            <form id="reservation-step-two" onSubmit={handlePayWithRazorpay} className="space-y-6">
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
+                <div className="border-b border-white/10 bg-white/[0.03] px-5 py-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[color:var(--text-soft)]">
+                    Order summary
+                  </p>
+                  <div className="mt-3 flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="font-bold text-white">Vibe Coding: The Right Way</p>
+                      <p className="mt-1 text-sm text-[color:var(--text-muted)]">
+                        27 June 2026 · Paperflite, Chennai
+                      </p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <div className="flex items-center justify-end gap-0.5">
+                        <IndianRupee className="h-5 w-5 text-[#BDEEFF]" />
+                        <span className="text-3xl font-black tracking-tight gradient-text">
+                          {TICKET_PRICE_INR.toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-[color:var(--text-soft)]">per seat</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">
-                  Seats are{" "}
-                  <strong className="text-white">strictly first come, first served</strong>. Right
-                  of admission is reserved — your seat is confirmed only after successful Razorpay
-                  payment.
+
+                <div className="space-y-3 px-5 py-4 text-sm">
+                  <div className="flex items-center justify-between gap-4 border-b border-white/8 pb-3">
+                    <span className="text-[color:var(--text-soft)]">Attendee</span>
+                    <span className="font-medium text-white">{stepOne.name}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 border-b border-white/8 pb-3">
+                    <span className="text-[color:var(--text-soft)]">Email</span>
+                    <span className="truncate font-medium text-white">{stepOne.email}</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-[color:var(--text-muted)]">
+                    <CreditCard className="mt-0.5 h-4 w-4 shrink-0 text-[#C88BEF]" />
+                    <span>
+                      Pay securely with <strong className="text-white">Razorpay</strong> — UPI,
+                      cards, netbanking, and wallets.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 rounded-xl border border-amber-400/20 bg-amber-400/5 px-4 py-3">
+                <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                <p className="text-sm leading-relaxed text-[color:var(--text-muted)]">
+                  Seats are <strong className="text-white">first come, first served</strong>. Your
+                  spot is confirmed only after successful payment.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                <div className="flex items-end gap-2">
-                  <IndianRupee className="mb-1 h-6 w-6 text-[#BDEEFF]" />
-                  <span className="text-4xl font-black tracking-tight gradient-text">
-                    {TICKET_PRICE_INR.toLocaleString("en-IN")}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[color:var(--text-soft)]">
+                    Terms &amp; conditions
+                  </p>
+                  <span className="text-xs text-[color:var(--text-soft)]">
+                    Required to continue
                   </span>
                 </div>
-                <p className="mt-1 text-sm text-[color:var(--text-soft)]">{PAYMENT_NOTE}</p>
-
-                <div className="mt-5 flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-[color:var(--text-muted)]">
-                  <CreditCard className="h-5 w-5 shrink-0 text-[#C88BEF]" />
-                  <span>
-                    Secure payment via <strong className="text-white">Razorpay</strong> — UPI,
-                    cards, netbanking, and wallets accepted.
+                <div className="max-h-40 overflow-y-auto rounded-xl border border-white/10 bg-black/25 px-4 py-3">
+                  <p className="whitespace-pre-wrap text-xs leading-relaxed text-[color:var(--text-muted)]">
+                    {TERMS_AND_CONDITIONS}
+                  </p>
+                </div>
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 transition hover:bg-white/[0.04]">
+                  <Checkbox
+                    checked={acceptedTerms}
+                    onCheckedChange={(v) => {
+                      clearError();
+                      setAcceptedTerms(v === true);
+                    }}
+                    className="mt-0.5"
+                  />
+                  <span className="text-sm leading-relaxed text-[color:var(--text-muted)]">
+                    I have read and agree to the terms and conditions.
                   </span>
-                </div>
+                </label>
               </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-xs font-bold uppercase tracking-[0.2em] text-[color:var(--text-soft)]">
-                  Terms & conditions
-                </div>
-                <div className="mt-3 max-h-36 overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed text-[color:var(--text-muted)]">
-                  {TERMS_AND_CONDITIONS}
-                </div>
-              </div>
-
-              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 px-4 py-3">
-                <Checkbox
-                  checked={acceptedTerms}
-                  onCheckedChange={(v) => setAcceptedTerms(v === true)}
-                  className="mt-0.5"
-                />
-                <span className="text-sm leading-relaxed text-[color:var(--text-muted)]">
-                  I have read and agree to the terms and conditions.
-                </span>
-              </label>
             </form>
-          )}
-
-          {error && (
-            <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {error}
-            </p>
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-white/10 px-6 py-5">
-          {step === 2 ? (
-            <button
-              type="button"
-              onClick={() => {
-                setError(null);
-                setStep(1);
-              }}
-              className="btn-secondary !py-2.5 !px-4 !text-sm"
-              disabled={submitting}
+        <div className="shrink-0 border-t border-white/10 px-6 py-5">
+          {error ? (
+            <p
+              className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+              role="alert"
             >
-              <ArrowLeft className="h-4 w-4" /> Back
-            </button>
-          ) : (
-            <div />
-          )}
+              {error}
+            </p>
+          ) : null}
 
-          {step === 1 ? (
-            <button
-              type="submit"
-              form="reservation-step-one"
-              className="btn-primary !py-2.5 !px-5 !text-sm"
-            >
-              Continue <ArrowRight className="h-4 w-4" />
-            </button>
-          ) : (
-            <button
-              type="submit"
-              form="reservation-step-two"
-              className="btn-primary !py-2.5 !px-5 !text-sm"
-              disabled={submitting}
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" /> Processing…
-                </>
-              ) : (
-                <>
-                  Pay with Razorpay <CreditCard className="h-4 w-4" />
-                </>
-              )}
-            </button>
-          )}
+          <div className="flex items-center justify-between gap-3">
+            {step === 2 ? (
+              <button
+                type="button"
+                onClick={() => {
+                  clearError();
+                  setStep(1);
+                }}
+                className="btn-secondary !py-2.5 !px-4 !text-sm"
+                disabled={submitting}
+              >
+                <ArrowLeft className="h-4 w-4" /> Back
+              </button>
+            ) : (
+              <div />
+            )}
+
+            {step === 1 ? (
+              <button
+                type="submit"
+                form="reservation-step-one"
+                className="btn-primary !py-2.5 !px-5 !text-sm"
+              >
+                Continue <ArrowRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                type="submit"
+                form="reservation-step-two"
+                className="btn-primary !py-2.5 !px-5 !text-sm"
+                disabled={submitting}
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" /> Processing…
+                  </>
+                ) : (
+                  <>
+                    Pay with Razorpay <CreditCard className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

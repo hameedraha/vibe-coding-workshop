@@ -83,13 +83,6 @@ export function useLandingAnimations(rootRef: RefObject<HTMLDivElement | null>) 
         },
       });
 
-      gsap.to("[data-marquee-inner]", {
-        xPercent: -50,
-        ease: "none",
-        duration: 30,
-        repeat: -1,
-      });
-
       gsap.utils.toArray<HTMLElement>("[data-scale-in]").forEach((el) => {
         gsap.fromTo(
           el,

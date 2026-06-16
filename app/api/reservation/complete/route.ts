@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 
+import {
+  confirmationCookieOptions,
+  encodeConfirmationCookie,
+  generateConfirmationId,
+  CONFIRMATION_COOKIE_NAME,
+} from "@/lib/confirmation-cookie.server";
 import { completeReservationFields } from "@/lib/registration.schema";
 import { sendRegistrationWebhook } from "@/lib/registration-webhook.server";
 import { verifyRazorpaySignature } from "@/lib/razorpay.server";
@@ -28,20 +34,26 @@ export async function POST(request: Request) {
       payment_id: data.razorpayPaymentId,
     });
 
-    const referenceId = `VPL-${data.razorpayPaymentId.slice(-8).toUpperCase()}`;
-
-    return NextResponse.json({
-      ok: true as const,
-      referenceId,
+    const confirmationId = generateConfirmationId();
+    const confirmation = {
+      id: confirmationId,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
       paymentId: data.razorpayPaymentId,
-      confirmation: {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        linkedin: data.linkedin,
-        experience: data.experience,
-      },
-    });
+      experience: data.experience,
+      linkedin: data.linkedin,
+      issuedAt: Date.now(),
+    };
+
+    const response = NextResponse.json({ ok: true as const, confirmationId });
+    response.cookies.set(
+      CONFIRMATION_COOKIE_NAME,
+      encodeConfirmationCookie(confirmation),
+      confirmationCookieOptions(),
+    );
+
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unable to complete reservation.";
     return NextResponse.json({ error: message }, { status: 400 });
