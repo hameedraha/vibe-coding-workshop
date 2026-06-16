@@ -21,8 +21,8 @@ import hameedPhoto from "@/assets/hameed.jpeg";
 import hariPhoto from "@/assets/hari.png";
 import leoPhoto from "@/assets/leo.jpeg";
 import doingThingsAiLogo from "@/assets/doing-things-ai.png";
-import lovableIconDark from "/Users/icrewsystemshq/.cursor/projects/Users-icrewsystemshq-Herd-vibe-product-lab/assets/lovable-icon-bg-dark-069c5a48-082c-4cf3-b2c5-e0fe8b4a83b0.png";
-import sayaboutusTextmarkDark from "/Users/icrewsystemshq/.cursor/projects/Users-icrewsystemshq-Herd-vibe-product-lab/assets/sayaboutus-textmark-dark-38dfd133-4fee-4029-8a3b-92d4a66a48d3.png";
+import lovableIconDark from "@/assets/lovable-icon-bg-dark.png";
+import sayaboutusTextmarkDark from "@/assets/sayaboutus-textmark-dark.png";
 
 export type Speaker = {
   ring: "r1" | "r2" | "r3";
