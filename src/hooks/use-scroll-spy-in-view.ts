@@ -9,7 +9,10 @@ type UseScrollSpyInViewOptions = {
 
 export function useScrollSpyInView(
   targetId: string,
-  { rootMargin = "-10% 0px -15% 0px", threshold = [0, 0.05, 0.15, 0.35] }: UseScrollSpyInViewOptions = {},
+  {
+    rootMargin = "-10% 0px -15% 0px",
+    threshold = [0, 0.05, 0.15, 0.35],
+  }: UseScrollSpyInViewOptions = {},
 ) {
   const [inView, setInView] = useState(false);
 

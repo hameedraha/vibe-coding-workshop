@@ -202,10 +202,7 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
       return "Please enter a valid email.";
     if (!/^[+\d\s-]{10,15}$/.test(stepOne.phone.trim()))
       return "Please enter a valid phone number.";
-    if (
-      stepOne.linkedin.trim() &&
-      !/^https?:\/\/.+/i.test(stepOne.linkedin.trim())
-    ) {
+    if (stepOne.linkedin.trim() && !/^https?:\/\/.+/i.test(stepOne.linkedin.trim())) {
       return "Please enter a valid LinkedIn URL.";
     }
     if (!stepOne.experience) return "Please select your vibe coding experience.";

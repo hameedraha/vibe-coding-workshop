@@ -361,7 +361,11 @@ export const EVENT_DETAILS: Array<{ icon: LucideIcon; label: string; value: stri
   },
 ];
 
-export const BRING_ITEMS = ["Your laptop", "An idea you're excited to build", "4 focused hours of your time"];
+export const BRING_ITEMS = [
+  "Your laptop",
+  "An idea you're excited to build",
+  "4 focused hours of your time",
+];
 
 export const PRICING_INCLUDES = [
   "4-hour live workshop with Hameed, Leo & Hari",

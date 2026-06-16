@@ -9,15 +9,15 @@ import {
   useImperativeHandle,
   useMemo,
   useRef,
-  type CSSProperties,
+  type ComponentPropsWithRef,
   type ReactElement,
   type ReactNode,
-  type RefObject,
 } from "react";
 import gsap from "gsap";
 
 type CardProps = React.HTMLAttributes<HTMLDivElement> & {
   customClass?: string;
+  "data-card-index"?: number;
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -83,10 +83,7 @@ type CardSwapProps = {
   children: ReactNode;
 };
 
-type CardElementProps = {
-  style?: CSSProperties;
-  onClick?: (e: React.MouseEvent) => void;
-};
+type CardElementProps = ComponentPropsWithRef<typeof Card>;
 
 const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
   {
@@ -372,10 +369,10 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
     const element = child as ReactElement<CardElementProps>;
     return cloneElement(element, {
       key: i,
-      ref: refs[i] as RefObject<HTMLDivElement>,
+      ref: refs[i],
       style: { width, height, ...(element.props.style ?? {}) },
       "data-card-index": i,
-      onClick: (e: React.MouseEvent) => {
+      onClick: (e: React.MouseEvent<HTMLDivElement>) => {
         element.props.onClick?.(e);
       },
     });

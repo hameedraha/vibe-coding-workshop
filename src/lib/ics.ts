@@ -8,7 +8,11 @@ function formatIcsUtc(date: Date) {
 }
 
 function escapeIcsText(value: string) {
-  return value.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/,/g, "\\,")
+    .replace(/;/g, "\\;");
 }
 
 export function buildWorkshopIcsContent(options?: { attendeeName?: string; referenceId?: string }) {

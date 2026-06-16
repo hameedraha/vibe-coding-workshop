@@ -75,7 +75,9 @@ export function EventDetails() {
               <div className="mt-4 text-[11px] font-bold tracking-[0.22em] uppercase text-[color:var(--text-soft)]">
                 {detail.label}
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">{detail.value}</p>
+              <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">
+                {detail.value}
+              </p>
             </article>
           ))}
         </div>
@@ -153,10 +155,7 @@ function BentoBenefitCard({
   const Icon = item.icon;
 
   return (
-    <article
-      data-stagger-item
-      className={`group relative ${className} ${spanClass}`}
-    >
+    <article data-stagger-item className={`group relative ${className} ${spanClass}`}>
       <div
         aria-hidden
         className="pointer-events-none absolute -inset-1 rounded-[1.35rem] bg-gradient-to-br from-[#C88BEF]/0 via-[#7DD3FC]/0 to-[#C88BEF]/0 opacity-0 blur-2xl transition-all duration-500 group-hover:from-[#C88BEF]/35 group-hover:via-[#A78BFA]/20 group-hover:to-[#7DD3FC]/30 group-hover:opacity-100"
@@ -346,8 +345,8 @@ export function Pricing() {
             <D text=" to ship." />
           </h2>
           <p className="mt-4 text-lg text-[color:var(--text-muted)]">
-            Walk in with an idea. Walk out with a product playbook, builder perks, and a path to your
-            first customers.
+            Walk in with an idea. Walk out with a product playbook, builder perks, and a path to
+            your first customers.
           </p>
         </div>
         <div data-scale-in className="relative max-w-4xl mx-auto">

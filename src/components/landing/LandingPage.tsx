@@ -29,10 +29,10 @@ export function LandingPage() {
         <Hero />
         <WhyMatters />
         <SpeakersCardSwap />
-        <EventDetails />        
+        <EventDetails />
         <WhatToBring />
-        <WhatYouLearn />        
-        <WhatYouGetBento />                
+        <WhatYouLearn />
+        <WhatYouGetBento />
         <Pricing />
         <Audience />
         <Testimonials />

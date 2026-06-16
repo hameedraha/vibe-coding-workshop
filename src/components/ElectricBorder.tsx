@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback, type CSSProperties, type ReactNode } from 'react';
-import './ElectricBorder.css';
+import { useEffect, useRef, useCallback, type CSSProperties, type ReactNode } from "react";
+import "./ElectricBorder.css";
 
 interface ElectricBorderProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ interface ElectricBorderProps {
 
 const ElectricBorder = ({
   children,
-  color = '#5227FF',
+  color = "#5227FF",
   speed = 1,
   chaos = 0.12,
   borderRadius = 24,
@@ -42,7 +42,7 @@ const ElectricBorder = ({
       const uy = fy * fy * (3.0 - 2.0 * fy);
       return a * (1 - ux) * (1 - uy) + b * ux * (1 - uy) + c * (1 - ux) * uy + d * ux * uy;
     },
-    [random]
+    [random],
   );
 
   const octavedNoise = useCallback(
@@ -55,7 +55,7 @@ const ElectricBorder = ({
       baseFrequency: number,
       time: number,
       seed: number,
-      baseFlatness: number
+      baseFlatness: number,
     ) => {
       let y = 0;
       let amplitude = baseAmplitude;
@@ -69,15 +69,22 @@ const ElectricBorder = ({
       }
       return y;
     },
-    [noise2D]
+    [noise2D],
   );
 
   const getCornerPoint = useCallback(
-    (centerX: number, centerY: number, radius: number, startAngle: number, arcLength: number, progress: number) => {
+    (
+      centerX: number,
+      centerY: number,
+      radius: number,
+      startAngle: number,
+      arcLength: number,
+      progress: number,
+    ) => {
       const angle = startAngle + progress * arcLength;
       return { x: centerX + radius * Math.cos(angle), y: centerY + radius * Math.sin(angle) };
     },
-    []
+    [],
   );
 
   const getRoundedRectPoint = useCallback(
@@ -95,7 +102,14 @@ const ElectricBorder = ({
       accumulated += straightWidth;
       if (distance <= accumulated + cornerArc) {
         const progress = (distance - accumulated) / cornerArc;
-        return getCornerPoint(left + width - radius, top + radius, radius, -Math.PI / 2, Math.PI / 2, progress);
+        return getCornerPoint(
+          left + width - radius,
+          top + radius,
+          radius,
+          -Math.PI / 2,
+          Math.PI / 2,
+          progress,
+        );
       }
       accumulated += cornerArc;
       if (distance <= accumulated + straightHeight) {
@@ -105,7 +119,14 @@ const ElectricBorder = ({
       accumulated += straightHeight;
       if (distance <= accumulated + cornerArc) {
         const progress = (distance - accumulated) / cornerArc;
-        return getCornerPoint(left + width - radius, top + height - radius, radius, 0, Math.PI / 2, progress);
+        return getCornerPoint(
+          left + width - radius,
+          top + height - radius,
+          radius,
+          0,
+          Math.PI / 2,
+          progress,
+        );
       }
       accumulated += cornerArc;
       if (distance <= accumulated + straightWidth) {
@@ -115,7 +136,14 @@ const ElectricBorder = ({
       accumulated += straightWidth;
       if (distance <= accumulated + cornerArc) {
         const progress = (distance - accumulated) / cornerArc;
-        return getCornerPoint(left + radius, top + height - radius, radius, Math.PI / 2, Math.PI / 2, progress);
+        return getCornerPoint(
+          left + radius,
+          top + height - radius,
+          radius,
+          Math.PI / 2,
+          Math.PI / 2,
+          progress,
+        );
       }
       accumulated += cornerArc;
       if (distance <= accumulated + straightHeight) {
@@ -126,14 +154,14 @@ const ElectricBorder = ({
       const progress = (distance - accumulated) / cornerArc;
       return getCornerPoint(left + radius, top + radius, radius, Math.PI, Math.PI / 2, progress);
     },
-    [getCornerPoint]
+    [getCornerPoint],
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const octaves = 10;
@@ -177,8 +205,8 @@ const ElectricBorder = ({
       ctx.scale(dpr, dpr);
       ctx.strokeStyle = color;
       ctx.lineWidth = 1;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
       const scale = displacement;
       const left = borderOffset;
@@ -194,8 +222,28 @@ const ElectricBorder = ({
       for (let i = 0; i <= sampleCount; i++) {
         const progress = i / sampleCount;
         const point = getRoundedRectPoint(progress, left, top, borderWidth, borderHeight, radius);
-        const xNoise = octavedNoise(progress * 8, octaves, lacunarity, gain, amplitude, frequency, timeRef.current, 0, baseFlatness);
-        const yNoise = octavedNoise(progress * 8, octaves, lacunarity, gain, amplitude, frequency, timeRef.current, 1, baseFlatness);
+        const xNoise = octavedNoise(
+          progress * 8,
+          octaves,
+          lacunarity,
+          gain,
+          amplitude,
+          frequency,
+          timeRef.current,
+          0,
+          baseFlatness,
+        );
+        const yNoise = octavedNoise(
+          progress * 8,
+          octaves,
+          lacunarity,
+          gain,
+          amplitude,
+          frequency,
+          timeRef.current,
+          1,
+          baseFlatness,
+        );
         const dx = point.x + xNoise * scale;
         const dy = point.y + yNoise * scale;
         if (i === 0) ctx.moveTo(dx, dy);
@@ -221,13 +269,13 @@ const ElectricBorder = ({
   }, [color, speed, chaos, borderRadius, octavedNoise, getRoundedRectPoint]);
 
   const vars = {
-    '--electric-border-color': color,
+    "--electric-border-color": color,
     borderRadius: `${borderRadius}px`,
     ...style,
   } as CSSProperties;
 
   return (
-    <div ref={containerRef} className={`electric-border ${className ?? ''}`} style={vars}>
+    <div ref={containerRef} className={`electric-border ${className ?? ""}`} style={vars}>
       <div className="eb-canvas-container">
         <canvas ref={canvasRef} className="eb-canvas" />
       </div>

@@ -1,7 +1,4 @@
-import {
-  completeReservationFields,
-  registrationFields,
-} from "../registration.schema";
+import { completeReservationFields, registrationFields } from "../registration.schema";
 
 async function postJson<TRequest, TResponse>(url: string, body: TRequest): Promise<TResponse> {
   const response = await fetch(url, {

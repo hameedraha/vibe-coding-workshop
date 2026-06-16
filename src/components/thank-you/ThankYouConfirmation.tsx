@@ -44,8 +44,8 @@ export function ThankYouConfirmation({
           You&apos;re in, {firstName}!
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-[color:var(--text-muted)]">
-          Payment confirmed. Your seat for <strong className="text-white">{WORKSHOP_EVENT.title}</strong>{" "}
-          is reserved.
+          Payment confirmed. Your seat for{" "}
+          <strong className="text-white">{WORKSHOP_EVENT.title}</strong> is reserved.
         </p>
       </div>
 
@@ -55,23 +55,33 @@ export function ThankYouConfirmation({
         </h2>
         <dl className="mt-4 grid gap-4 sm:grid-cols-2">
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">Name</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+              Name
+            </dt>
             <dd className="mt-1 text-sm font-medium text-white">{name}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">Email</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+              Email
+            </dt>
             <dd className="mt-1 text-sm font-medium text-white">{email}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">Phone</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+              Phone
+            </dt>
             <dd className="mt-1 text-sm font-medium text-white">{phone}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">Reference</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+              Reference
+            </dt>
             <dd className="mt-1 font-mono text-sm font-medium text-white">{referenceId}</dd>
           </div>
           <div className="sm:col-span-2">
-            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">Payment ID</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+              Payment ID
+            </dt>
             <dd className="mt-1 break-all font-mono text-sm font-medium text-white">{paymentId}</dd>
           </div>
           {experienceText ? (
@@ -84,7 +94,9 @@ export function ThankYouConfirmation({
           ) : null}
           {linkedin ? (
             <div className="sm:col-span-2">
-              <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">LinkedIn</dt>
+              <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+                LinkedIn
+              </dt>
               <dd className="mt-1 text-sm font-medium text-white">
                 <a
                   href={linkedin}
@@ -131,8 +143,7 @@ export function ThankYouConfirmation({
       </div>
 
       <p className="mt-6 flex items-center justify-center gap-2 text-center text-sm text-[color:var(--text-soft)]">
-        <Mail className="h-4 w-4 shrink-0" />
-        A confirmation email will be sent to {email} shortly.
+        <Mail className="h-4 w-4 shrink-0" />A confirmation email will be sent to {email} shortly.
       </p>
     </div>
   );

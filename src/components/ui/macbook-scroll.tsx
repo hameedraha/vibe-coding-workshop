@@ -24,7 +24,6 @@ import { IconCommand } from "@tabler/icons-react";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { IconCaretDownFilled } from "@tabler/icons-react";
 
-
 export const MacbookScroll = ({
   src,
   screen,
@@ -54,16 +53,8 @@ export const MacbookScroll = ({
     }
   }, []);
 
-  const scaleX = useTransform(
-    scrollYProgress,
-    [0, 0.3],
-    [1.2, isMobile ? 1 : 1.5],
-  );
-  const scaleY = useTransform(
-    scrollYProgress,
-    [0, 0.3],
-    [0.6, isMobile ? 1 : 1.5],
-  );
+  const scaleX = useTransform(scrollYProgress, [0, 0.3], [1.2, isMobile ? 1 : 1.5]);
+  const scaleY = useTransform(scrollYProgress, [0, 0.3], [0.6, isMobile ? 1 : 1.5]);
   const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
@@ -119,27 +110,27 @@ export const MacbookScroll = ({
         />
         {/* Base area */}
         <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
-        {/* above keyboard bar */}
-        <div className="relative h-10 w-full">
-          <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
-        </div>
-        <div className="relative flex">
-          <div className="mx-auto h-full w-[10%] overflow-hidden">
-            <SpeakerGrid />
+          {/* above keyboard bar */}
+          <div className="relative h-10 w-full">
+            <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
           </div>
-          <div className="mx-auto h-full w-[80%]">
-            <Keypad />
+          <div className="relative flex">
+            <div className="mx-auto h-full w-[10%] overflow-hidden">
+              <SpeakerGrid />
+            </div>
+            <div className="mx-auto h-full w-[80%]">
+              <Keypad />
+            </div>
+            <div className="mx-auto h-full w-[10%] overflow-hidden">
+              <SpeakerGrid />
+            </div>
           </div>
-          <div className="mx-auto h-full w-[10%] overflow-hidden">
-            <SpeakerGrid />
-          </div>
-        </div>
-        <Trackpad />
-        <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
-        {showGradient && (
-          <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
-        )}
-        {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
+          <Trackpad />
+          <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
+          {showGradient && (
+            <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
+          )}
+          {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
         </div>
       </div>
     </div>
@@ -525,10 +516,7 @@ export const Keypad = () => {
             <span className="block">option</span>
           </div>
         </KBtn>
-        <KBtn
-          className="w-8"
-          childrenClassName="h-full justify-between py-[4px]"
-        >
+        <KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-end pr-1">
             <IconCommand className="h-[6px] w-[6px]" />
           </div>
@@ -537,10 +525,7 @@ export const Keypad = () => {
           </div>
         </KBtn>
         <KBtn className="w-[8.2rem]"></KBtn>
-        <KBtn
-          className="w-8"
-          childrenClassName="h-full justify-between py-[4px]"
-        >
+        <KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-start pl-1">
             <IconCommand className="h-[6px] w-[6px]" />
           </div>
@@ -601,8 +586,7 @@ export const KBtn = ({
           className,
         )}
         style={{
-          boxShadow:
-            "0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset",
+          boxShadow: "0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset",
         }}
       >
         <div
@@ -624,8 +608,7 @@ export const SpeakerGrid = () => {
     <div
       className="mt-2 flex h-40 gap-[2px] px-[0.5px]"
       style={{
-        backgroundImage:
-          "radial-gradient(circle, #08080A 0.5px, transparent 0.5px)",
+        backgroundImage: "radial-gradient(circle, #08080A 0.5px, transparent 0.5px)",
         backgroundSize: "3px 3px",
       }}
     ></div>
@@ -642,26 +625,13 @@ export const OptionKey = ({ className }: { className: string }) => {
       viewBox="0 0 32 32"
       className={className}
     >
-      <rect
-        stroke="currentColor"
-        strokeWidth={2}
-        x="18"
-        y="5"
-        width="10"
-        height="2"
-      />
+      <rect stroke="currentColor" strokeWidth={2} x="18" y="5" width="10" height="2" />
       <polygon
         stroke="currentColor"
         strokeWidth={2}
         points="10.6,5 4,5 4,7 9.4,7 18.4,27 28,27 28,25 19.6,25 "
       />
-      <rect
-        id="_Transparent_Rectangle_"
-        className="st0"
-        width="32"
-        height="32"
-        stroke="none"
-      />
+      <rect id="_Transparent_Rectangle_" className="st0" width="32" height="32" stroke="none" />
     </svg>
   );
 };

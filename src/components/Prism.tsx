@@ -373,7 +373,9 @@ const Prism = ({
 
         if (NOISE_IS_ZERO) {
           const settled =
-            Math.abs(yaw - targetYaw) < 1e-4 && Math.abs(pitch - targetPitch) < 1e-4 && Math.abs(roll) < 1e-4;
+            Math.abs(yaw - targetYaw) < 1e-4 &&
+            Math.abs(pitch - targetPitch) < 1e-4 &&
+            Math.abs(roll) < 1e-4;
           if (settled) continueRAF = false;
         }
       } else if (animationType === "3drotate") {
