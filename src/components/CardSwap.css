@@ -1,20 +1,86 @@
+.card-swap-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card-swap-tabs {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 520px;
+  z-index: 30;
+  padding-bottom: 0.75rem;
+  pointer-events: auto;
+}
+
+.card-swap-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.card-swap-tab:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.card-swap-tab--active {
+  border-color: rgba(200, 139, 239, 0.55);
+  background: rgba(200, 139, 239, 0.14);
+  color: #fff;
+  box-shadow: 0 0 24px rgba(200, 139, 239, 0.2);
+}
+
+.card-swap-tab__avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-swap-tab__label {
+  padding-right: 0.15rem;
+  white-space: nowrap;
+}
+
 .card-swap-container {
   position: absolute;
   bottom: 0;
-  right: 0;
-  transform: translate(5%, 20%);
-  transform-origin: bottom right;
-
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, 10%);
+  transform-origin: center bottom;
   perspective: 900px;
   overflow: visible;
   pointer-events: auto;
 }
 
 .card-swap-container--centered {
-  left: 50%;
-  right: auto;
-  transform: translate(-50%, 10%);
-  transform-origin: center bottom;
+  /* modifier kept for API compatibility */
 }
 
 .card-swap-container--flat {
@@ -29,6 +95,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  box-sizing: border-box;
   border-radius: 14px;
   border: none;
   padding: 2px;
@@ -90,7 +157,21 @@
 }
 
 @media (max-width: 767px) {
-  .card-swap-container--centered {
+  .card-swap-container {
     transform: translate(-50%, 0);
+  }
+
+  .card-swap-tabs {
+    gap: 0.4rem;
+  }
+
+  .card-swap-tab {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem 0.3rem 0.3rem;
+  }
+
+  .card-swap-tab__avatar {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }

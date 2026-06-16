@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Check, Linkedin, Mic, X } from "lucide-react";
 
-import CardSwap, { Card, type CardSwapHandle } from "@/components/CardSwap";
+import CardSwap, { type CardSwapHandle } from "@/components/CardSwap";
 import { SPEAKERS, toYouTubeEmbedUrl, type Speaker } from "@/components/landing/data";
 import { D } from "@/components/landing/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -185,14 +185,9 @@ export function SpeakersCardSwap() {
   const [modalSpeaker, setModalSpeaker] = useState<Speaker | null>(null);
   const isMobile = useIsMobile();
 
-  const handleCardAction = useCallback((idx: number) => {
-    const frontIdx = cardSwapRef.current?.getFrontIndex() ?? 0;
-    if (idx === frontIdx) {
-      cardSwapRef.current?.pause();
-      setModalSpeaker(SPEAKERS[idx]);
-      return;
-    }
-    cardSwapRef.current?.bringToFront(idx);
+  const handleFrontClick = useCallback((idx: number) => {
+    cardSwapRef.current?.pause();
+    setModalSpeaker(SPEAKERS[idx]);
   }, []);
 
   const handleModalClose = useCallback(() => {
@@ -228,6 +223,7 @@ export function SpeakersCardSwap() {
           >
             <CardSwap
               ref={cardSwapRef}
+              count={SPEAKERS.length}
               width={isMobile ? 320 : 400}
               height={isMobile ? 440 : 520}
               cardDistance={isMobile ? 0 : 50}
@@ -237,22 +233,19 @@ export function SpeakersCardSwap() {
               skewAmount={isMobile ? 0 : 5}
               flat={isMobile}
               containerClassName="card-swap-container--centered"
-            >
-              {SPEAKERS.map((speaker, i) => (
-                <Card
-                  key={speaker.name}
-                  className={`card--${speaker.ring} cursor-pointer shadow-[0_24px_80px_rgba(0,0,0,0.45)]`}
-                  onClick={(e) => {
-                    if ((e.target as HTMLElement).closest("a")) return;
-                    handleCardAction(i);
-                  }}
-                >
-                  <div className="card-inner">
-                    <SpeakerSwapCardContent s={speaker} />
-                  </div>
-                </Card>
-              ))}
-            </CardSwap>
+              getCardClassName={(i) => `card--${SPEAKERS[i].ring}`}
+              onFrontClick={handleFrontClick}
+              renderTab={(i) => {
+                const speaker = SPEAKERS[i];
+                return (
+                  <>
+                    <img src={speaker.photo} alt="" className="card-swap-tab__avatar" aria-hidden />
+                    <span className="card-swap-tab__label">{speaker.name}</span>
+                  </>
+                );
+              }}
+              renderCard={(i) => <SpeakerSwapCardContent s={SPEAKERS[i]} />}
+            />
           </div>
         </div>
       </div>
