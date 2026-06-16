@@ -15,15 +15,16 @@ import {
   type RefObject,
 } from "react";
 import gsap from "gsap";
-import "./CardSwap.css";
 
 type CardProps = React.HTMLAttributes<HTMLDivElement> & {
   customClass?: string;
 };
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, className, ...rest }, ref) => (
-  <div ref={ref} {...rest} className={`card ${customClass ?? ""} ${className ?? ""}`.trim()} />
-));
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ customClass, className, ...rest }, ref) => (
+    <div ref={ref} {...rest} className={`card ${customClass ?? ""} ${className ?? ""}`.trim()} />
+  ),
+);
 Card.displayName = "Card";
 
 type CardSlot = {
@@ -33,7 +34,13 @@ type CardSlot = {
   zIndex: number;
 };
 
-const makeSlot = (i: number, distX: number, distY: number, total: number, flat = false): CardSlot => ({
+const makeSlot = (
+  i: number,
+  distX: number,
+  distY: number,
+  total: number,
+  flat = false,
+): CardSlot => ({
   x: flat ? 0 : i * distX,
   y: -i * distY,
   z: flat ? 0 : -i * distX * 1.5,
@@ -57,6 +64,7 @@ const placeNow = (el: HTMLElement, slot: CardSlot, skew: number, flat = false) =
 export type CardSwapHandle = {
   pause: () => void;
   resume: () => void;
+  forceResume: () => void;
   bringToFront: (idx: number) => void;
   getFrontIndex: () => number;
 };
@@ -73,6 +81,11 @@ type CardSwapProps = {
   easing?: "linear" | "elastic";
   containerClassName?: string;
   children: ReactNode;
+};
+
+type CardElementProps = {
+  style?: CSSProperties;
+  onClick?: (e: React.MouseEvent) => void;
 };
 
 const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
@@ -114,14 +127,11 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
   );
 
   const childArr = useMemo(() => Children.toArray(children), [children]);
-  const refs = useMemo(
-    () => childArr.map(() => createRef<HTMLDivElement>()),
-    [childArr.length],
-  );
+  const refs = useMemo(() => childArr.map(() => createRef<HTMLDivElement>()), [childArr]);
 
   const order = useRef(Array.from({ length: childArr.length }, (_, i) => i));
   const tlRef = useRef<gsap.core.Timeline | null>(null);
-  const intervalRef = useRef<number>();
+  const intervalRef = useRef<number | undefined>(undefined);
   const container = useRef<HTMLDivElement>(null);
   const isPausedRef = useRef(false);
   const isManualAnimatingRef = useRef(false);
@@ -150,6 +160,12 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
   const resume = useCallback(() => {
     pauseLockRef.current = Math.max(0, pauseLockRef.current - 1);
     if (pauseLockRef.current > 0) return;
+    isPausedRef.current = false;
+    scheduleRotation();
+  }, [scheduleRotation]);
+
+  const forceResume = useCallback(() => {
+    pauseLockRef.current = 0;
     isPausedRef.current = false;
     scheduleRotation();
   }, [scheduleRotation]);
@@ -227,26 +243,12 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
     [animateToOrder],
   );
 
-  const getFrontIndex = useCallback(() => {
-    let frontIdx = order.current[0] ?? 0;
-    let maxZ = -Infinity;
+  const getFrontIndex = useCallback(() => order.current[0] ?? 0, []);
 
-    refs.forEach((r, i) => {
-      const el = r.current;
-      if (!el) return;
-      const z = Number.parseInt(getComputedStyle(el).zIndex, 10) || 0;
-      if (z >= maxZ) {
-        maxZ = z;
-        frontIdx = i;
-      }
-    });
-
-    return frontIdx;
-  }, [refs]);
-
-  useImperativeHandle(ref, () => ({ pause, resume, bringToFront, getFrontIndex }), [
+  useImperativeHandle(ref, () => ({ pause, resume, forceResume, bringToFront, getFrontIndex }), [
     pause,
     resume,
+    forceResume,
     bringToFront,
     getFrontIndex,
   ]);
@@ -255,7 +257,13 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
     const total = refs.length;
     order.current = Array.from({ length: total }, (_, i) => i);
     refs.forEach((r, i) => {
-      if (r.current) placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total, flat), skewAmount, flat);
+      if (r.current)
+        placeNow(
+          r.current,
+          makeSlot(i, cardDistance, verticalDistance, total, flat),
+          skewAmount,
+          flat,
+        );
     });
 
     const swap = () => {
@@ -359,22 +367,19 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(function CardSwap(
     scheduleRotation,
   ]);
 
-  const rendered = childArr.map((child, i) =>
-    isValidElement(child)
-      ? cloneElement(
-          child as ReactElement<{ style?: CSSProperties; onClick?: (e: React.MouseEvent) => void }>,
-          {
-            key: i,
-            ref: refs[i] as RefObject<HTMLDivElement>,
-            style: { width, height, ...(child.props.style ?? {}) },
-            "data-card-index": i,
-            onClick: (e: React.MouseEvent) => {
-              child.props.onClick?.(e);
-            },
-          },
-        )
-      : child,
-  );
+  const rendered = childArr.map((child, i) => {
+    if (!isValidElement(child)) return child;
+    const element = child as ReactElement<CardElementProps>;
+    return cloneElement(element, {
+      key: i,
+      ref: refs[i] as RefObject<HTMLDivElement>,
+      style: { width, height, ...(element.props.style ?? {}) },
+      "data-card-index": i,
+      onClick: (e: React.MouseEvent) => {
+        element.props.onClick?.(e);
+      },
+    });
+  });
 
   return (
     <div

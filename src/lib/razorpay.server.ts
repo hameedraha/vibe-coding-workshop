@@ -25,6 +25,9 @@ export function getTicketAmountPaise() {
 
 export function verifyRazorpaySignature(orderId: string, paymentId: string, signature: string) {
   const { keySecret } = getRazorpayConfig();
-  const expected = crypto.createHmac("sha256", keySecret).update(`${orderId}|${paymentId}`).digest("hex");
+  const expected = crypto
+    .createHmac("sha256", keySecret)
+    .update(`${orderId}|${paymentId}`)
+    .digest("hex");
   return expected === signature;
 }

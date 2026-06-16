@@ -8,9 +8,17 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
-import { ArrowLeft, ArrowRight, CreditCard, IndianRupee, Loader2, ShieldAlert, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CreditCard,
+  IndianRupee,
+  Loader2,
+  ShieldAlert,
+  X,
+} from "lucide-react";
 
 import { completeReservation, createRazorpayOrder } from "@/lib/api/reservation.functions";
 import { openRazorpayCheckout } from "@/lib/razorpay";
@@ -85,7 +93,7 @@ type ReservationWizardProps = {
 };
 
 function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const stepContentRef = useRef<HTMLDivElement>(null);
@@ -171,8 +179,10 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
 
   const validateStepOne = () => {
     if (stepOne.name.trim().length < 2) return "Please enter your name.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(stepOne.email.trim())) return "Please enter a valid email.";
-    if (!/^[+\d\s-]{10,15}$/.test(stepOne.phone.trim())) return "Please enter a valid phone number.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(stepOne.email.trim()))
+      return "Please enter a valid email.";
+    if (!/^[+\d\s-]{10,15}$/.test(stepOne.phone.trim()))
+      return "Please enter a valid phone number.";
     if (!stepOne.experience) return "Please select your vibe coding experience.";
     return null;
   };
@@ -239,13 +249,11 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
             closingRef.current = true;
             onOpenChange(false);
             reset();
-            await navigate({
-              to: "/thank-you",
-              search: {
-                name: registration.name,
-                ref: result.referenceId,
-              },
+            const params = new URLSearchParams({
+              name: registration.name,
+              ref: result.referenceId,
             });
+            router.push(`/thank-you?${params.toString()}`);
           } catch {
             setError("Payment received but confirmation failed. Contact us with your payment ID.");
             setSubmitting(false);
@@ -341,7 +349,9 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                 <Label htmlFor="res-experience">Vibe coding experience</Label>
                 <Select
                   value={stepOne.experience || undefined}
-                  onValueChange={(value) => setStepOne((s) => ({ ...s, experience: value as VibeExperience }))}
+                  onValueChange={(value) =>
+                    setStepOne((s) => ({ ...s, experience: value as VibeExperience }))
+                  }
                 >
                   <SelectTrigger
                     id="res-experience"
@@ -351,7 +361,11 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                   </SelectTrigger>
                   <SelectContent className="z-[250] border-white/10 bg-[#0c0c10] text-white">
                     {VIBE_EXPERIENCE_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="text-[color:var(--text-muted)]">
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        className="text-[color:var(--text-muted)]"
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
@@ -367,8 +381,10 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                   Important
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">
-                  Seats are <strong className="text-white">strictly first come, first served</strong>. Right of
-                  admission is reserved — your seat is confirmed only after successful Razorpay payment.
+                  Seats are{" "}
+                  <strong className="text-white">strictly first come, first served</strong>. Right
+                  of admission is reserved — your seat is confirmed only after successful Razorpay
+                  payment.
                 </p>
               </div>
 
@@ -384,8 +400,8 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                 <div className="mt-5 flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-[color:var(--text-muted)]">
                   <CreditCard className="h-5 w-5 shrink-0 text-[#C88BEF]" />
                   <span>
-                    Secure payment via <strong className="text-white">Razorpay</strong> — UPI, cards, netbanking, and
-                    wallets accepted.
+                    Secure payment via <strong className="text-white">Razorpay</strong> — UPI,
+                    cards, netbanking, and wallets accepted.
                   </span>
                 </div>
               </div>
@@ -400,7 +416,11 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
               </div>
 
               <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 px-4 py-3">
-                <Checkbox checked={acceptedTerms} onCheckedChange={(v) => setAcceptedTerms(v === true)} className="mt-0.5" />
+                <Checkbox
+                  checked={acceptedTerms}
+                  onCheckedChange={(v) => setAcceptedTerms(v === true)}
+                  className="mt-0.5"
+                />
                 <span className="text-sm leading-relaxed text-[color:var(--text-muted)]">
                   I have read and agree to the terms and conditions.
                 </span>
@@ -433,11 +453,20 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
           )}
 
           {step === 1 ? (
-            <button type="submit" form="reservation-step-one" className="btn-primary !py-2.5 !px-5 !text-sm">
+            <button
+              type="submit"
+              form="reservation-step-one"
+              className="btn-primary !py-2.5 !px-5 !text-sm"
+            >
               Continue <ArrowRight className="h-4 w-4" />
             </button>
           ) : (
-            <button type="submit" form="reservation-step-two" className="btn-primary !py-2.5 !px-5 !text-sm" disabled={submitting}>
+            <button
+              type="submit"
+              form="reservation-step-two"
+              className="btn-primary !py-2.5 !px-5 !text-sm"
+              disabled={submitting}
+            >
               {submitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" /> Processing…

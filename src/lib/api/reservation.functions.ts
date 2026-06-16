@@ -1,4 +1,3 @@
-import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { VIBE_EXPERIENCE_OPTIONS } from "../reservation.constants";
@@ -20,68 +19,48 @@ const registrationFields = z.object({
   experience: z.enum(experienceValues),
 });
 
-export const createRazorpayOrder = createServerFn({ method: "POST" })
-  .inputValidator(registrationFields)
-  .handler(async ({ data }) => {
-    const { getRazorpayClient, getRazorpayConfig, getTicketAmountPaise } = await import("../razorpay.server");
+const completeReservationFields = registrationFields.extend({
+  acceptedTerms: z.literal(true, {
+    errorMap: () => ({ message: "You must accept the terms and conditions" }),
+  }),
+  razorpayOrderId: z.string().min(1),
+  razorpayPaymentId: z.string().min(1),
+  razorpaySignature: z.string().min(1),
+});
 
-    const referenceId = `VPL-${Date.now().toString(36).toUpperCase()}`;
-    const { keyId } = getRazorpayConfig();
-    const razorpay = getRazorpayClient();
-
-    const order = await razorpay.orders.create({
-      amount: getTicketAmountPaise(),
-      currency: "INR",
-      receipt: referenceId,
-      notes: {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        experience: data.experience,
-      },
-    });
-
-    return {
-      keyId,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      referenceId,
-    };
+async function postJson<TRequest, TResponse>(url: string, body: TRequest): Promise<TResponse> {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
 
-export const completeReservation = createServerFn({ method: "POST" })
-  .inputValidator(
-    registrationFields.extend({
-      acceptedTerms: z.literal(true, {
-        errorMap: () => ({ message: "You must accept the terms and conditions" }),
-      }),
-      razorpayOrderId: z.string().min(1),
-      razorpayPaymentId: z.string().min(1),
-      razorpaySignature: z.string().min(1),
-    }),
-  )
-  .handler(async ({ data }) => {
-    const { verifyRazorpaySignature } = await import("../razorpay.server");
+  const payload = (await response.json().catch(() => null)) as
+    | { error?: string }
+    | TResponse
+    | null;
+  if (!response.ok) {
+    const message =
+      payload && typeof payload === "object" && "error" in payload && payload.error
+        ? payload.error
+        : "Request failed.";
+    throw new Error(message);
+  }
+  return payload as TResponse;
+}
 
-    const isValid = verifyRazorpaySignature(data.razorpayOrderId, data.razorpayPaymentId, data.razorpaySignature);
-    if (!isValid) {
-      throw new Error("Payment verification failed.");
-    }
+export async function createRazorpayOrder({ data }: { data: unknown }) {
+  const parsed = registrationFields.parse(data);
+  return postJson<
+    typeof parsed,
+    { keyId: string; orderId: string; amount: number; currency: string }
+  >("/api/reservation/create-order", parsed);
+}
 
-    const referenceId = `VPL-${data.razorpayPaymentId.slice(-8).toUpperCase()}`;
-
-    console.info("[reservation:paid]", referenceId, {
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      experience: data.experience,
-      orderId: data.razorpayOrderId,
-      paymentId: data.razorpayPaymentId,
-    });
-
-    return {
-      ok: true as const,
-      referenceId,
-    };
-  });
+export async function completeReservation({ data }: { data: unknown }) {
+  const parsed = completeReservationFields.parse(data);
+  return postJson<typeof parsed, { ok: true; referenceId: string }>(
+    "/api/reservation/complete",
+    parsed,
+  );
+}

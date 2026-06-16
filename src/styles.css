@@ -247,4 +247,152 @@
   @media (max-width: 768px) {
     .section-pad { padding: 64px 0; }
   }
+
+  .playbook-pipeline {
+    position: relative;
+  }
+
+  .playbook-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  }
+
+  .playbook-step:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+
+  .playbook-step__node {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .playbook-step__dot {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(5, 5, 5, 0.55);
+    box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.9);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+
+  .playbook-step:hover .playbook-step__dot {
+    transform: scale(1.06);
+  }
+
+  .playbook-step__index {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .playbook-step__title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .playbook-step__desc {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text-soft);
+  }
+
+  .playbook-step--identify .playbook-step__dot { color: #bdeeff; box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.9), 0 0 24px rgba(189, 238, 255, 0.2); }
+  .playbook-step--validate .playbook-step__dot { color: #c88bef; box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.9), 0 0 24px rgba(200, 139, 239, 0.2); }
+  .playbook-step--build .playbook-step__dot { color: #8ea7ff; box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.9), 0 0 24px rgba(142, 167, 255, 0.2); }
+  .playbook-step--launch .playbook-step__dot { color: #e6ff6b; box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.9), 0 0 24px rgba(230, 255, 107, 0.16); }
+
+  .playbook-step--identify:hover { border-color: rgba(189, 238, 255, 0.28); }
+  .playbook-step--validate:hover { border-color: rgba(200, 139, 239, 0.28); }
+  .playbook-step--build:hover { border-color: rgba(142, 167, 255, 0.28); }
+  .playbook-step--launch:hover { border-color: rgba(230, 255, 107, 0.22); }
+
+  .audience-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.75rem 1.75rem 1.75rem 1.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .audience-panel__label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .audience-panel__title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .audience-panel__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .audience-panel__item {
+    display: flex;
+    gap: 0.875rem;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .audience-panel__marker {
+    flex-shrink: 0;
+    width: 1.25rem;
+    margin-top: 0.2rem;
+  }
+
+  .audience-panel--fit {
+    background: linear-gradient(160deg, rgba(189, 238, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 55%);
+    border-color: rgba(189, 238, 255, 0.14);
+  }
+
+  .audience-panel--fit .audience-panel__label {
+    color: #bdeeff;
+  }
+
+  .audience-panel--fit .audience-panel__marker {
+    color: #bdeeff;
+  }
+
+  .audience-panel--skip {
+    background: linear-gradient(160deg, rgba(255, 122, 26, 0.05) 0%, rgba(255, 255, 255, 0.02) 55%);
+    border-color: rgba(255, 122, 26, 0.12);
+  }
+
+  .audience-panel--skip .audience-panel__label {
+    color: #ff9a5c;
+  }
+
+  .audience-panel--skip .audience-panel__marker {
+    color: #ff7a1a;
+  }
 }
