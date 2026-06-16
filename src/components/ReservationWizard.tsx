@@ -38,12 +38,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FloatingReserveButton } from "@/components/FloatingReserveButton";
+import { useScrollSpyInView } from "@/hooks/use-scroll-spy-in-view";
 
 type ReservationContextValue = {
   openReservation: () => void;
 };
 
 const ReservationContext = createContext<ReservationContextValue | null>(null);
+
+const PRICING_SECTION_ID = "pricing";
+
+function FloatingReserveGate({
+  reservationOpen,
+  onOpen,
+}: {
+  reservationOpen: boolean;
+  onOpen: () => void;
+}) {
+  const pricingInView = useScrollSpyInView(PRICING_SECTION_ID);
+
+  return <FloatingReserveButton visible={!reservationOpen && !pricingInView} onClick={onOpen} />;
+}
 
 export function ReservationProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -52,6 +68,7 @@ export function ReservationProvider({ children }: { children: ReactNode }) {
   return (
     <ReservationContext.Provider value={{ openReservation }}>
       {children}
+      <FloatingReserveGate reservationOpen={open} onOpen={openReservation} />
       <ReservationWizard open={open} onOpenChange={setOpen} />
     </ReservationContext.Provider>
   );
@@ -84,6 +101,7 @@ type StepOneData = {
   name: string;
   email: string;
   phone: string;
+  linkedin: string;
   experience: VibeExperience | "";
 };
 
@@ -106,6 +124,7 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
     name: "",
     email: "",
     phone: "",
+    linkedin: "",
     experience: "",
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -114,7 +133,7 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
     setStep(1);
     setSubmitting(false);
     setError(null);
-    setStepOne({ name: "", email: "", phone: "", experience: "" });
+    setStepOne({ name: "", email: "", phone: "", linkedin: "", experience: "" });
     setAcceptedTerms(false);
     closingRef.current = false;
   }, []);
@@ -183,6 +202,12 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
       return "Please enter a valid email.";
     if (!/^[+\d\s-]{10,15}$/.test(stepOne.phone.trim()))
       return "Please enter a valid phone number.";
+    if (
+      stepOne.linkedin.trim() &&
+      !/^https?:\/\/.+/i.test(stepOne.linkedin.trim())
+    ) {
+      return "Please enter a valid LinkedIn URL.";
+    }
     if (!stepOne.experience) return "Please select your vibe coding experience.";
     return null;
   };
@@ -219,6 +244,7 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
       name: stepOne.name.trim(),
       email: stepOne.email.trim(),
       phone: stepOne.phone.trim(),
+      linkedin: stepOne.linkedin.trim(),
       experience: stepOne.experience as VibeExperience,
     };
 
@@ -250,9 +276,16 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
             onOpenChange(false);
             reset();
             const params = new URLSearchParams({
-              name: registration.name,
+              name: result.confirmation.name,
+              email: result.confirmation.email,
+              phone: result.confirmation.phone,
               ref: result.referenceId,
+              payment: result.paymentId,
+              experience: result.confirmation.experience,
             });
+            if (result.confirmation.linkedin) {
+              params.set("linkedin", result.confirmation.linkedin);
+            }
             router.push(`/thank-you?${params.toString()}`);
           } catch {
             setError("Payment received but confirmation failed. Contact us with your payment ID.");
@@ -342,6 +375,19 @@ function ReservationWizard({ open, onOpenChange }: ReservationWizardProps) {
                   className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition focus:border-[#C88BEF]/60"
                   placeholder="+91 98765 43210"
                   autoComplete="tel"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="res-linkedin">LinkedIn profile (optional)</Label>
+                <input
+                  id="res-linkedin"
+                  type="url"
+                  value={stepOne.linkedin}
+                  onChange={(e) => setStepOne((s) => ({ ...s, linkedin: e.target.value }))}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition focus:border-[#C88BEF]/60"
+                  placeholder="https://linkedin.com/in/you"
+                  autoComplete="url"
                 />
               </div>
 

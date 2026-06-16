@@ -9,7 +9,7 @@ import { ReserveSeatButton } from "@/components/ReservationWizard";
 
 export function Hero() {
   return (
-    <section className="hero-bg relative overflow-hidden pt-28 pb-24 md:pt-40 md:pb-32">
+    <section className="hero-bg relative overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32">
       <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
       <div
         data-parallax="0.4"

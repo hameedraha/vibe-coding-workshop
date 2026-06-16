@@ -22,5 +22,6 @@ export function getServerConfig() {
     // Add server-only values here, e.g.:
     //   databaseUrl: process.env.DATABASE_URL,
     //   stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    //   n8nRegistrationWebhookUrl: process.env.N8N_REGISTRATION_WEBHOOK_URL,
   };
 }

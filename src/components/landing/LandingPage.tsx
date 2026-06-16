@@ -14,7 +14,6 @@ import {
   WhyMatters,
 } from "@/components/landing/sections/ContentSections";
 import { Hero } from "@/components/landing/sections/Hero";
-import { Nav } from "@/components/landing/sections/Nav";
 import { SpeakersCardSwap } from "@/components/landing/sections/Speakers";
 import { Testimonials } from "@/components/landing/sections/Testimonials";
 import { WhatToBring } from "@/components/landing/sections/WhatToBring";
@@ -27,7 +26,6 @@ export function LandingPage() {
   return (
     <ReservationProvider>
       <div ref={rootRef} className="min-h-screen bg-background text-foreground overflow-x-hidden">
-        <Nav />
         <Hero />
         <WhyMatters />
         <SpeakersCardSwap />

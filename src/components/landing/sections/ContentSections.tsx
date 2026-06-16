@@ -329,7 +329,7 @@ export function Audience() {
 
 export function Pricing() {
   return (
-    <section className="section-pad relative">
+    <section id="pricing" className="section-pad relative scroll-mt-8">
       <div
         data-parallax="0.3"
         className="absolute top-10 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full pointer-events-none"

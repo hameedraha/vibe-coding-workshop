@@ -1,25 +1,7 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
-import { VIBE_EXPERIENCE_OPTIONS } from "@/lib/reservation.constants";
+import { registrationFields } from "@/lib/registration.schema";
 import { getRazorpayClient, getRazorpayConfig, getTicketAmountPaise } from "@/lib/razorpay.server";
-
-const experienceValues = VIBE_EXPERIENCE_OPTIONS.map((o) => o.value) as [
-  (typeof VIBE_EXPERIENCE_OPTIONS)[number]["value"],
-  ...(typeof VIBE_EXPERIENCE_OPTIONS)[number]["value"][],
-];
-
-const registrationFields = z.object({
-  name: z.string().trim().min(2, "Name is required"),
-  email: z.string().trim().email("Enter a valid email"),
-  phone: z
-    .string()
-    .trim()
-    .min(10, "Enter a valid phone number")
-    .max(15, "Enter a valid phone number")
-    .regex(/^[+\d\s-]+$/, "Enter a valid phone number"),
-  experience: z.enum(experienceValues),
-});
 
 export async function POST(request: Request) {
   try {
@@ -38,6 +20,7 @@ export async function POST(request: Request) {
         name: data.name,
         email: data.email,
         phone: data.phone,
+        linkedin: data.linkedin,
         experience: data.experience,
       },
     });
