@@ -1,23 +1,8 @@
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 import { ThankYouConfirmation } from "@/components/thank-you/ThankYouConfirmation";
-import {
-  CONFIRMATION_COOKIE_NAME,
-  decodeConfirmationCookie,
-} from "@/lib/confirmation-cookie.server";
 
-export const dynamic = "force-dynamic";
-
-export default async function ThankYouPage() {
-  const cookieStore = await cookies();
-  const confirmation = decodeConfirmationCookie(cookieStore.get(CONFIRMATION_COOKIE_NAME)?.value);
-
-  if (!confirmation) {
-    redirect("/");
-  }
-
+export default function ThankYouPage() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <div className="hero-bg absolute inset-0 pointer-events-none" />
@@ -40,7 +25,7 @@ export default async function ThankYouPage() {
 
       <main className="relative">
         <div className="vc-container py-12 md:py-16 lg:py-20">
-          <ThankYouConfirmation confirmation={confirmation} />
+          <ThankYouConfirmation />
         </div>
       </main>
     </div>

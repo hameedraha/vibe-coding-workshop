@@ -94,9 +94,7 @@ export function isNextCacheCorrupt() {
   const missing = getMissingChunkRefs();
 
   if (missing.length > 0) {
-    console.warn(
-      `[next] Stale .next cache: missing webpack chunks ${missing.join(", ")}.`,
-    );
+    console.warn(`[next] Stale .next cache: missing webpack chunks ${missing.join(", ")}.`);
     return true;
   }
 
@@ -106,8 +104,7 @@ export function isNextCacheCorrupt() {
 function isNextDevProcess(commandLine) {
   return (
     commandLine.includes("next dev") &&
-    (commandLine.includes(PROJECT_ROOT) ||
-      commandLine.includes(join(PROJECT_ROOT, "node_modules")))
+    (commandLine.includes(PROJECT_ROOT) || commandLine.includes(join(PROJECT_ROOT, "node_modules")))
   );
 }
 
