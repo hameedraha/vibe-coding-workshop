@@ -107,18 +107,32 @@ function BentoBenefitCard({
   return (
     <article className={`bento-cell ${spanClass}`}>
       <div className="relative z-10 flex h-full flex-col">
-        {item.logo ? (
-          <img
-            src={item.logo}
-            alt={`${item.title} logo`}
-            loading="lazy"
-            className={`mb-5 ${item.logoClassName ?? "h-10 w-10 rounded-lg object-cover"}`}
-          />
-        ) : (
-          <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-section)] accent-text">
-            <Icon className="h-5 w-5" strokeWidth={2} />
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            {item.logo ? (
+              <img
+                src={item.logo}
+                alt={`${item.title} logo`}
+                loading="lazy"
+                className={item.logoClassName ?? "h-10 w-10 rounded-lg object-cover"}
+              />
+            ) : (
+              <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-section)] accent-text">
+                <Icon className="h-5 w-5" strokeWidth={2} />
+              </div>
+            )}
           </div>
-        )}
+
+          <div className="bento-value-pill shrink-0">
+            <span className="bento-value-pill__amount">
+              ₹{item.valueInr.toLocaleString("en-IN")}
+            </span>
+            <span className="bento-value-pill__label">
+              {item.valueEstimated ? "est. value" : "value"}
+            </span>
+          </div>
+        </div>
+
         <h3 className="font-display text-lg font-bold leading-snug tracking-tight text-[color:var(--text-main)]">
           {item.title}
         </h3>

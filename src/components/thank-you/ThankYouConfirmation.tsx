@@ -3,54 +3,11 @@ import Link from "next/link";
 
 export function ThankYouConfirmation() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-section)] px-3 py-4 sm:px-4 sm:py-5">
-      <span className="font-mono text-2xl font-extrabold tabular-nums text-[color:var(--text-main)] sm:text-3xl">
-        {String(value).padStart(2, "0")}
+    <div className="mx-auto w-full max-w-xl text-center">
+      <span className="badge-orange mb-5 inline-flex items-center gap-2">
+        <CheckCircle2 className="h-3.5 w-3.5" />
+        Thank you
       </span>
-      <span className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--text-soft)] sm:text-[11px]">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function EventCountdown() {
-  const [parts, setParts] = useState<CountdownParts>(() => getCountdown(WORKSHOP_EVENT.startIso));
-
-  useEffect(() => {
-    const tick = () => setParts(getCountdown(WORKSHOP_EVENT.startIso));
-    tick();
-    const id = window.setInterval(tick, 1000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  if (parts.isPast) {
-    return (
-      <p className="text-base font-semibold text-[color:var(--text-main)]">
-        Workshop day — see you at Paperflite!
-      </p>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-4 gap-2 sm:gap-3">
-      <CountdownUnit value={parts.days} label="Days" />
-      <CountdownUnit value={parts.hours} label="Hours" />
-      <CountdownUnit value={parts.minutes} label="Mins" />
-      <CountdownUnit value={parts.seconds} label="Secs" />
-    </div>
-  );
-}
-
-function SectionCard({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <section
-      className={`rounded-[24px] border border-[color:var(--border)] bg-[color:var(--bg-section)] p-6 md:p-7 ${className}`}
-    >
-      {children}
-    </section>
-  );
-}
 
       <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
         You&apos;re <span className="gradient-text">all set</span>.

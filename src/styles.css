@@ -362,6 +362,37 @@
     border-color: oklch(0.58 0.2 32 / 30%);
     box-shadow: 0 20px 48px oklch(0.18 0.008 60 / 10%);
   }
+
+  .bento-value-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid oklch(0.58 0.2 32 / 18%);
+    background: oklch(0.58 0.2 32 / 6%);
+  }
+
+  .bento-value-pill__amount {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--accent-vermillion);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bento-value-pill__label {
+    margin-top: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
   .bento-cell--accent {
     background: var(--accent-vermillion);
     color: oklch(0.98 0.006 75);

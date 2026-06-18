@@ -102,6 +102,8 @@ export const WORKSHOP_BENEFITS: Array<{
   title: string;
   desc: string;
   className: string;
+  valueInr: number;
+  valueEstimated?: boolean;
   logo?: string;
   logoClassName?: string;
 }> = [
@@ -109,6 +111,7 @@ export const WORKSHOP_BENEFITS: Array<{
     icon: Gift,
     title: "Lovable Credits (300)",
     desc: "Build and iterate without hitting free-plan limits. Equivalent usage would otherwise cost about $20 USD/month for similar capacity.",
+    valueInr: 7000,
     logo: lovableIconDark.src,
     className: "min-h-[280px]",
     logoClassName: "h-14 w-14 rounded-xl object-cover ring-1 ring-white/15",
@@ -117,32 +120,42 @@ export const WORKSHOP_BENEFITS: Array<{
     icon: Library,
     title: "Prompt Library + Build Stack",
     desc: "Ship faster with proven prompts, 100+ website design references, and ready n8n automations for your Minimum Lovable Product.",
+    valueInr: 12000,
+    valueEstimated: true,
     className: "min-h-[240px]",
   },
   {
     icon: MessageCircle,
     title: "SayAboutUs Credits",
     desc: "Collect fast, actionable feedback for your product using SayAboutUs credits included with your workshop access.",
+    valueInr: 8500,
+    valueEstimated: true,
     logo: sayaboutusTextmarkDark.src,
     className: "min-h-[260px]",
-    logoClassName: "h-12 w-auto max-w-[220px] object-contain",
+    logoClassName: "h-7 w-auto max-w-[112px] object-contain object-left",
   },
   {
     icon: Users,
     title: "AI Builders Network Access",
     desc: "Get unstuck fast in a private Telegram group with active builders sharing feedback, tools, and launch lessons.",
+    valueInr: 18000,
+    valueEstimated: true,
     className: "min-h-[220px]",
   },
   {
     icon: Award,
     title: "Physical Launch Certificate",
     desc: "Show credible proof that you launched. Share digitally verifiable credentials with recruiters, clients, and your network.",
+    valueInr: 6500,
+    valueEstimated: true,
     className: "min-h-[220px]",
   },
   {
     icon: Megaphone,
     title: "Vibe Coder Swag Stickers",
     desc: "Signal that you build in public. Use the sticker pack as social proof and a conversation starter with other makers.",
+    valueInr: 3500,
+    valueEstimated: true,
     className: "min-h-[240px]",
   },
 ];

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { ReserveSeatButton } from "@/components/ReservationWizard";
 
 const NAV_LINKS = [
   { href: "#details", label: "Details" },
@@ -47,16 +46,7 @@ export function Nav() {
         }`}
       >
         <div className="vc-container flex h-16 items-center justify-between gap-4">
-          <a href="#" className="flex items-center gap-2.5 group">
-            <div className="relative h-8 w-8 rounded-lg bg-[color:var(--accent-vermillion)] flex items-center justify-center overflow-hidden">
-              <span className="font-display font-bold text-[color:var(--bg-main)] text-sm">V</span>
-            </div>
-            <span className="font-display font-bold tracking-tight text-[color:var(--text-main)]">
-              Vibe Coding
-            </span>
-          </a>
-
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-8 md:flex">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
@@ -68,19 +58,14 @@ export function Nav() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
-            <ReserveSeatButton className="btn-secondary !py-2.5 !px-5 !text-sm shrink-0 hidden sm:inline-flex">
-              Reserve Seat
-            </ReserveSeatButton>
-            <button
-              type="button"
-              onClick={() => setMobileOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-[color:var(--border)] text-[color:var(--text-main)] transition-colors hover:bg-[color:var(--bg-section)] md:hidden"
-              aria-label="Open menu"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg border border-[color:var(--border)] text-[color:var(--text-main)] transition-colors hover:bg-[color:var(--bg-section)] md:hidden"
+            aria-label="Open menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </motion.header>
 
@@ -133,10 +118,6 @@ export function Nav() {
                   </motion.a>
                 ))}
               </nav>
-
-              <div className="border-t border-[color:var(--border)] p-6">
-                <ReserveSeatButton className="btn-primary w-full">Reserve Seat</ReserveSeatButton>
-              </div>
             </motion.div>
           </motion.div>
         )}
