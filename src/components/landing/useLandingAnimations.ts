@@ -8,6 +8,9 @@ export function useLandingAnimations(rootRef: RefObject<HTMLDivElement | null>) 
   useEffect(() => {
     if (!rootRef.current) return;
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {

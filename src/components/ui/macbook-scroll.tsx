@@ -65,7 +65,9 @@ export const MacbookScroll = ({
       ref={ref}
       className={cn(
         "flex shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100",
-        compact ? "min-h-[140vh] md:pb-56" : "min-h-[200vh] md:py-80",
+        compact
+          ? "min-h-[90vh] md:min-h-[140vh] md:pb-56"
+          : "min-h-[120vh] md:min-h-[200vh] md:py-80",
       )}
     >
       {title ? (

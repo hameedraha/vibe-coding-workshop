@@ -19,7 +19,7 @@ import {
 
 import hameedPhoto from "@/assets/hameed.jpeg";
 import hariPhoto from "@/assets/hari.png";
-import leoPhoto from "@/assets/leo.jpeg";
+import leoPhoto from "@/assets/leo.png";
 import doingThingsAiLogo from "@/assets/doing-things-ai.png";
 import lovableIconDark from "@/assets/lovable-icon-bg-dark.png";
 import sayaboutusTextmarkDark from "@/assets/sayaboutus-textmark-dark.png";
@@ -46,6 +46,10 @@ export type Testimonial = {
 };
 
 export const HERO_MARQUEE_ITEMS = [
+  "AI Vibe Coding",
+  "★",
+  "The Right Way",
+  "★",
   "Build the right thing",
   "★",
   "Build it the right way",
@@ -400,3 +404,56 @@ export const toYouTubeEmbedUrl = (url: string) => {
     return url;
   }
 };
+
+export type FAQ = {
+  question: string;
+  answer: string;
+};
+
+export const FAQ_ITEMS: FAQ[] = [
+  {
+    question: "Will recordings be provided after the workshop?",
+    answer:
+      "No. This is a live, in-person workshop only. No recordings will be provided. You have to be there to get the full experience. The hands-on interactions, real-time feedback, and in-room energy cannot be replicated on video.",
+  },
+  {
+    question: "Can I redeem the Lovable credits and other perks if I don't attend?",
+    answer:
+      "No. All credits, perks, and deliverables, including Lovable credits (300), SayAboutUs credits, the prompt library, design references, n8n templates, and the launch certificate, can only be redeemed by attendees who are present at the workshop. No-shows forfeit all included benefits.",
+  },
+  {
+    question: "How do I redeem the Lovable credits?",
+    answer:
+      "Lovable credits (300) can only be redeemed by attendees present at the workshop. You will receive a redemption code during the session. Credits are non-transferable and must be claimed on the day of the event.",
+  },
+  {
+    question: "How do I redeem the SayAboutUs credits?",
+    answer:
+      "Like the Lovable credits, SayAboutUs credits are only available to attendees who are present at the workshop. A redemption link will be shared during the session. These credits cannot be claimed after the event.",
+  },
+  {
+    question: "When will I receive the Prompt Library and Build Stack?",
+    answer:
+      "All digital resources, including the Prompt Library, design references, and n8n automation templates, will be shared at the end of the workshop session. You must be present to receive access.",
+  },
+  {
+    question: "Is this workshop for beginners?",
+    answer:
+      "Yes, but you should be ready to do hands-on work. The workshop is designed for anyone who wants to build products with AI, regardless of technical background. If you can use a laptop and are eager to learn, you'll be fine.",
+  },
+  {
+    question: "What if I can't attend on 27 June?",
+    answer:
+      "Seats are limited and tickets are non-refundable unless the event is cancelled by the organisers. We recommend checking your availability before booking. If you have a genuine emergency, reach out to us and we'll try to help.",
+  },
+  {
+    question: "Will food and refreshments be provided?",
+    answer:
+      "Yes. Snacks and refreshments are included with your ticket. If you have dietary restrictions, let us know when we reach out to confirm your registration.",
+  },
+  {
+    question: "Can I get a refund?",
+    answer:
+      "Refunds are only available if the event is cancelled by the organisers. In that case, refunds will be processed within 14 business days. Seats are first come, first served and your payment confirms your spot.",
+  },
+];

@@ -50,8 +50,8 @@ function getCountdown(targetIso: string): CountdownParts {
 
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-4 sm:px-4 sm:py-5">
-      <span className="font-mono text-2xl font-extrabold tabular-nums text-white sm:text-3xl">
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-section)] px-3 py-4 sm:px-4 sm:py-5">
+      <span className="font-mono text-2xl font-extrabold tabular-nums text-[color:var(--text-main)] sm:text-3xl">
         {String(value).padStart(2, "0")}
       </span>
       <span className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--text-soft)] sm:text-[11px]">
@@ -73,7 +73,9 @@ function EventCountdown() {
 
   if (parts.isPast) {
     return (
-      <p className="text-base font-semibold text-white">Workshop day — see you at Paperflite!</p>
+      <p className="text-base font-semibold text-[color:var(--text-main)]">
+        Workshop day — see you at Paperflite!
+      </p>
     );
   }
 
@@ -90,7 +92,7 @@ function EventCountdown() {
 function SectionCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <section
-      className={`rounded-[24px] border border-white/10 bg-white/[0.03] p-6 md:p-7 ${className}`}
+      className={`rounded-[24px] border border-[color:var(--border)] bg-[color:var(--bg-section)] p-6 md:p-7 ${className}`}
     >
       {children}
     </section>
@@ -109,20 +111,24 @@ export function ThankYouConfirmation({ confirmation }: ThankYouConfirmationProps
           Payment confirmed
         </span>
         <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
-          You&apos;re in, <span className="gradient-text">{firstName}</span>.
+          You&apos;re in, <span className="accent-text">{firstName}</span>.
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-[color:var(--text-muted)] md:text-lg">
-          Your seat for <strong className="text-white">{WORKSHOP_EVENT.title}</strong> is reserved.
+          Your seat for{" "}
+          <strong className="text-[color:var(--text-main)]">{WORKSHOP_EVENT.title}</strong> is
+          reserved.
         </p>
       </div>
 
-      <SectionCard className="mt-10 border-[#C88BEF]/30 bg-[#C88BEF]/8">
+      <SectionCard className="mt-10 border-[color:var(--accent-vermillion)]/30 bg-[color:var(--accent-vermillion)]/8">
         <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#C88BEF]/20 text-[#C88BEF]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[color:var(--accent-vermillion)]/20 text-[color:var(--accent-vermillion)]">
             <Camera className="h-5 w-5" strokeWidth={2.25} />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-lg font-extrabold text-white">Screenshot this page</h2>
+            <h2 className="text-lg font-extrabold text-[color:var(--text-main)]">
+              Screenshot this page
+            </h2>
             <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">
               Show it at check-in on 27 June. This confirmation lives in your browser only — save it
               on your phone before you close this tab.
@@ -140,15 +146,15 @@ export function ThankYouConfirmation({ confirmation }: ThankYouConfirmationProps
             <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
               Confirmation ID
             </dt>
-            <dd className="mt-1.5 font-mono text-2xl font-extrabold tracking-wide text-white sm:text-3xl">
+            <dd className="mt-1.5 font-mono text-2xl font-extrabold tracking-wide text-[color:var(--text-main)] sm:text-3xl">
               {confirmation.id}
             </dd>
           </div>
-          <div className="border-t border-white/8 pt-5">
+          <div className="border-t border-[color:var(--border)] pt-5">
             <dt className="text-xs uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
               Razorpay payment ID
             </dt>
-            <dd className="mt-1.5 break-all font-mono text-sm font-medium leading-relaxed text-white sm:text-base">
+            <dd className="mt-1.5 break-all font-mono text-sm font-medium leading-relaxed text-[color:var(--text-main)] sm:text-base">
               {confirmation.paymentId}
             </dd>
           </div>
@@ -167,11 +173,11 @@ export function ThankYouConfirmation({ confirmation }: ThankYouConfirmationProps
 
       <SectionCard className="mt-5">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#C88BEF]/15 text-[#C88BEF]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color:var(--accent-vermillion)]/15 text-[color:var(--accent-vermillion)]">
             <Lightbulb className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-lg font-extrabold text-white">What next?</h2>
+            <h2 className="text-lg font-extrabold text-[color:var(--text-main)]">What next?</h2>
             <p className="mt-3 text-sm leading-relaxed text-[color:var(--text-muted)] md:text-base">
               Think of an idea you&apos;re excited to build. Bring it to the workshop — we&apos;ll
               help you pressure-test it and ship it with AI.
@@ -186,11 +192,11 @@ export function ThankYouConfirmation({ confirmation }: ThankYouConfirmationProps
         </h2>
         <div className="mt-4 space-y-3 text-sm leading-relaxed text-[color:var(--text-muted)]">
           <p className="flex items-start gap-2.5">
-            <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#C88BEF]" />
+            <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent-vermillion)]" />
             <span>{WORKSHOP_EVENT.displayWhen}</span>
           </p>
           <p className="flex items-start gap-2.5">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#BDEEFF]" />
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent-vermillion)]" />
             <span>{WORKSHOP_EVENT.displayWhere}</span>
           </p>
         </div>
@@ -200,26 +206,34 @@ export function ThankYouConfirmation({ confirmation }: ThankYouConfirmationProps
         <h2 className="text-xs font-bold uppercase tracking-[0.22em] text-[color:var(--text-soft)]">
           Registration details
         </h2>
-        <dl className="mt-4 divide-y divide-white/8 text-sm">
+        <dl className="mt-4 divide-y divide-[color:var(--border)] text-sm">
           <div className="flex justify-between gap-4 py-3 first:pt-0">
             <dt className="shrink-0 text-[color:var(--text-soft)]">Name</dt>
-            <dd className="text-right font-medium text-white">{confirmation.name}</dd>
+            <dd className="text-right font-medium text-[color:var(--text-main)]">
+              {confirmation.name}
+            </dd>
           </div>
           <div className="flex justify-between gap-4 py-3">
             <dt className="shrink-0 text-[color:var(--text-soft)]">Email</dt>
-            <dd className="break-all text-right font-medium text-white">{confirmation.email}</dd>
+            <dd className="break-all text-right font-medium text-[color:var(--text-main)]">
+              {confirmation.email}
+            </dd>
           </div>
           <div className="flex justify-between gap-4 py-3">
             <dt className="shrink-0 text-[color:var(--text-soft)]">Phone</dt>
-            <dd className="text-right font-medium text-white">{confirmation.phone}</dd>
+            <dd className="text-right font-medium text-[color:var(--text-main)]">
+              {confirmation.phone}
+            </dd>
           </div>
           <div className="flex justify-between gap-4 py-3">
             <dt className="shrink-0 text-[color:var(--text-soft)]">Experience</dt>
-            <dd className="text-right font-medium text-white">{experienceText}</dd>
+            <dd className="text-right font-medium text-[color:var(--text-main)]">
+              {experienceText}
+            </dd>
           </div>
           <div className="flex justify-between gap-4 py-3 last:pb-0">
             <dt className="shrink-0 text-[color:var(--text-soft)]">Amount paid</dt>
-            <dd className="text-right font-medium text-white">
+            <dd className="text-right font-medium text-[color:var(--text-main)]">
               ₹{TICKET_PRICE_INR.toLocaleString("en-IN")}
             </dd>
           </div>

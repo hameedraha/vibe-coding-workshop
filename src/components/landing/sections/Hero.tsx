@@ -1,114 +1,200 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, MapPin } from "lucide-react";
 
 import hameedPhoto from "@/assets/hameed.jpeg";
 import hariPhoto from "@/assets/hari.png";
 import leoPhoto from "@/assets/leo.jpeg";
 import { HERO_MARQUEE_ITEMS } from "@/components/landing/data";
-import { D } from "@/components/landing/utils";
 import { ReserveSeatButton } from "@/components/ReservationWizard";
-import ScrollVelocity from "@/components/ui/scroll-velocity";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+function DateStamp() {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      initial={reduce ? false : { opacity: 0, scale: 0.92, rotate: -3 }}
+      animate={
+        reduce
+          ? { opacity: 1, scale: 1, rotate: -2 }
+          : {
+              opacity: 1,
+              scale: 1,
+              rotate: -2,
+              boxShadow: [
+                "0 10px 30px oklch(0.58 0.2 32 / 0.08)",
+                "0 18px 50px oklch(0.58 0.2 32 / 0.18)",
+                "0 10px 30px oklch(0.58 0.2 32 / 0.08)",
+              ],
+            }
+      }
+      transition={
+        reduce
+          ? { duration: 0.9, delay: 0.4, ease: EASE }
+          : {
+              opacity: { duration: 0.9, delay: 0.4, ease: EASE },
+              scale: { duration: 0.9, delay: 0.4, ease: EASE },
+              rotate: { duration: 0.9, delay: 0.4, ease: EASE },
+              boxShadow: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.3 },
+            }
+      }
+      whileHover={
+        reduce
+          ? undefined
+          : {
+              y: -10,
+              rotate: 0,
+              scale: 1.04,
+              boxShadow: "0 30px 80px oklch(0.58 0.2 32 / 0.3)",
+            }
+      }
+      className="date-stamp w-[280px] p-8 text-center cursor-default"
+    >
+      <div className="date-stamp__corner" />
+      <div className="editorial-label text-[color:var(--accent-vermillion)]">Save the date</div>
+      <div className="mt-4 font-display text-[88px] leading-none font-extrabold tracking-tighter text-[color:var(--text-main)]">
+        27
+      </div>
+      <div className="mt-1 font-display text-2xl font-bold tracking-tight text-[color:var(--text-main)]">
+        June 2026
+      </div>
+      <div className="mt-4 pt-4 border-t border-[color:var(--border)] text-xs font-bold tracking-[0.18em] uppercase text-[color:var(--text-soft)]">
+        Saturday · 4 Hours
+      </div>
+    </motion.div>
+  );
+}
 
 export function Hero() {
+  const reduce = useReducedMotion();
+
+  const heroVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, delay: 0.1 + i * 0.12, ease: EASE },
+    }),
+  };
+
   return (
-    <section className="hero-bg relative overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32">
-      <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
-      <div
-        data-parallax="0.4"
-        className="absolute -top-20 -left-20 w-[420px] h-[420px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(200,139,239,0.35), transparent 70%)" }}
-      />
-      <div
-        data-parallax="0.25"
-        className="absolute top-40 -right-20 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(189,238,255,0.25), transparent 70%)" }}
-      />
+    <section className="relative overflow-hidden pt-28 pb-20 md:pt-36 md:pb-28 lg:pt-44 lg:pb-32">
       <div className="vc-container relative">
-        <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-center">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+          {/* Left: content */}
           <div>
-            <span className="badge-orange mb-6" data-reveal>
-              Offline Event · Chennai
-            </span>
-            <h1
-              data-hero-title
-              className="font-display uppercase tracking-tight font-extrabold leading-[0.88] text-[clamp(56px,9vw,120px)]"
+            <motion.div
+              custom={0}
+              initial={reduce ? false : "hidden"}
+              animate="visible"
+              variants={heroVariants}
             >
-              <span data-hero-line className="block gradient-text">
-                <D text="AI Vibe" />
-              </span>
-              <span data-hero-line className="block font-light text-[#EDEDF5]">
-                <D text="Coding" />
-              </span>
-              <span data-hero-line className="block text-[0.42em] tracking-tight mt-4 text-white">
-                <D text="THE " />
-                <span className="underline-word">
-                  <D text="RIGHT" />
-                </span>
-                <D text=" WAY" />
-              </span>
+              <span className="badge-accent">Offline Event · Chennai</span>
+            </motion.div>
+
+            <h1 className="mt-6 font-display font-extrabold leading-[0.92] tracking-[-0.03em] text-[clamp(44px,7.5vw,92px)]">
+              <motion.span
+                custom={1}
+                initial={reduce ? false : "hidden"}
+                animate="visible"
+                variants={heroVariants}
+                className="block text-[color:var(--text-main)]"
+              >
+                AI Vibe Coding
+              </motion.span>
+              <motion.span
+                custom={2}
+                initial={reduce ? false : "hidden"}
+                animate="visible"
+                variants={heroVariants}
+                className="block"
+              >
+                The <span className="accent-text">Right</span> Way
+              </motion.span>
             </h1>
-            <p
-              data-reveal
-              className="mt-8 text-xl md:text-[22px] text-[color:var(--text-muted)] leading-relaxed max-w-2xl"
+
+            <motion.p
+              custom={3}
+              initial={reduce ? false : "hidden"}
+              animate="visible"
+              variants={heroVariants}
+              className="mt-7 text-lg md:text-xl text-[color:var(--text-muted)] leading-relaxed max-w-xl"
             >
-              A <strong className="text-white font-extrabold">4-hour, hands-on workshop</strong> by{" "}
-              <span className="gradient-text font-extrabold">Hameed</span>,{" "}
-              <span className="gradient-text font-extrabold">Leo</span> and{" "}
-              <span className="gradient-text font-extrabold">Hari</span>.
-            </p>
-            <div className="mt-8 flex items-center gap-5" data-reveal>
-              <div className="flex">
-                <div className="avatar-ring r1 overflow-hidden !p-0">
-                  <img src={hameedPhoto.src} alt="Hameed" className="w-full h-full object-cover" />
-                </div>
-                <div className="avatar-ring r2 overflow-hidden !p-0">
-                  <img src={leoPhoto.src} alt="Leo" className="w-full h-full object-cover" />
-                </div>
-                <div className="avatar-ring r3 overflow-hidden !p-0">
-                  <img src={hariPhoto.src} alt="Hari" className="w-full h-full object-cover" />
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-[color:var(--text-soft)]">
-                <MapPin className="h-5 w-5" />
-                <span>Paperflite HQ, Perungudi, Chennai</span>
-              </div>
-            </div>
-            <div className="mt-10 flex flex-wrap gap-4" data-reveal>
+              A{" "}
+              <strong className="text-[color:var(--text-main)] font-bold">
+                4-hour, hands-on workshop
+              </strong>{" "}
+              by <strong className="text-[color:var(--text-main)] font-bold">Hameed</strong>,{" "}
+              <strong className="text-[color:var(--text-main)] font-bold">Leo</strong> and{" "}
+              <strong className="text-[color:var(--text-main)] font-bold">Hari</strong>.
+            </motion.p>
+
+            <motion.div
+              custom={4}
+              initial={reduce ? false : "hidden"}
+              animate="visible"
+              variants={heroVariants}
+              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4"
+            >
               <ReserveSeatButton>
                 Reserve Your Seat <ArrowRight className="h-4 w-4" />
               </ReserveSeatButton>
-            </div>
-          </div>
-          <div className="flex justify-center lg:justify-end" data-date-card>
-            <div className="date-card">
-              <div className="text-[96px] leading-none font-black">27</div>
-              <div className="text-2xl font-extrabold tracking-[0.08em] uppercase mt-1">
-                June 2026
+              <div className="flex items-center gap-3">
+                <div className="flex">
+                  <div className="h-11 w-11 rounded-full border-2 border-[color:var(--bg-main)] overflow-hidden -ml-2 first:ml-0">
+                    <img
+                      src={hameedPhoto.src}
+                      alt="Hameed"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="h-11 w-11 rounded-full border-2 border-[color:var(--bg-main)] overflow-hidden -ml-2">
+                    <img src={leoPhoto.src} alt="Leo" className="h-full w-full object-cover" />
+                  </div>
+                  <div className="h-11 w-11 rounded-full border-2 border-[color:var(--bg-main)] overflow-hidden -ml-2">
+                    <img src={hariPhoto.src} alt="Hari" className="h-full w-full object-cover" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-sm text-[color:var(--text-soft)]">
+                  <MapPin className="h-4 w-4" />
+                  <span>Perungudi, Chennai</span>
+                </div>
               </div>
-              <div className="mt-3 text-xs font-bold tracking-[0.2em] uppercase opacity-70">
-                Saturday · 4 Hours
-              </div>
-            </div>
+            </motion.div>
           </div>
+
+          {/* Right: date stamp */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, scale: 0.92, rotate: -3 }}
+            animate={{ opacity: 1, scale: 1, rotate: -2 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: EASE }}
+            className="flex justify-center lg:justify-end"
+          >
+            <DateStamp />
+          </motion.div>
         </div>
       </div>
-      <div className="relative mt-20 overflow-hidden border-y border-white/10 py-5 bg-black/40">
-        <ScrollVelocity
-          velocity={50}
-          numCopies={4}
-          className="inline-flex items-center gap-12 text-2xl md:text-3xl font-extrabold uppercase tracking-tight"
-          texts={[
-            <>
+
+      {/* Marquee */}
+      <div className="relative mt-24 overflow-hidden border-y border-[color:var(--border)] py-5 md:mt-40">
+        <div className="marquee-track">
+          {[0, 1, 2, 3].map((copy) => (
+            <div key={copy} className="flex items-center gap-10 pr-10" aria-hidden={copy > 0}>
               {HERO_MARQUEE_ITEMS.map((item, i) => (
                 <span
-                  key={`${item}-${i}`}
-                  className={i % 2 === 0 ? "gradient-text" : "text-white/40"}
+                  key={`${copy}-${i}`}
+                  className={`font-display text-xl md:text-2xl font-bold uppercase tracking-tight whitespace-nowrap ${
+                    i % 2 === 0 ? "text-[color:var(--text-main)]" : "accent-text"
+                  }`}
                 >
                   {item}
                 </span>
               ))}
-            </>,
-          ]}
-        />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

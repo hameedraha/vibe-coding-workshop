@@ -29,7 +29,7 @@ export function FloatingReserveButton({ visible, onClick }: FloatingReserveButto
           <motion.button
             type="button"
             onClick={onClick}
-            className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.08] px-6 py-3.5 text-sm font-bold tracking-wide text-white shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-colors hover:border-white/30 hover:bg-white/[0.14]"
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-[color:var(--bg-card)] px-6 py-3.5 text-sm font-bold tracking-wide text-[color:var(--text-main)] shadow-[0_12px_40px_oklch(0.18_0.008_60/0.18)] backdrop-blur-xl transition-colors hover:border-[color:var(--accent-vermillion)] hover:text-[color:var(--accent-vermillion)]"
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.97 }}
             animate={{ y: [0, -5, 0] }}
