@@ -12,6 +12,7 @@ import {
   WORKSHOP_BENEFITS,
 } from "@/components/landing/data";
 import { D } from "@/components/landing/utils";
+import { SponsorTileContent } from "@/components/landing/SponsorTileContent";
 import { Reveal, Stagger, StaggerItem } from "@/components/landing/motion";
 import { ReserveSeatButton } from "@/components/ReservationWizard";
 import { TICKET_PRICE_INR } from "@/lib/reservation.constants";
@@ -107,7 +108,9 @@ function BentoBenefitCard({
   return (
     <article className={`bento-cell ${spanClass}`}>
       <div className="relative z-10 flex h-full flex-col">
-        <div className="mb-5 flex items-center justify-between gap-3">
+        <div
+          className={`mb-5 flex items-center gap-3 ${item.valueInr != null ? "justify-between" : ""}`}
+        >
           <div className="min-w-0 flex-1">
             {item.logo ? (
               <img
@@ -123,14 +126,16 @@ function BentoBenefitCard({
             )}
           </div>
 
-          <div className="bento-value-pill shrink-0">
-            <span className="bento-value-pill__amount">
-              ₹{item.valueInr.toLocaleString("en-IN")}
-            </span>
-            <span className="bento-value-pill__label">
-              {item.valueEstimated ? "est. value" : "value"}
-            </span>
-          </div>
+          {item.valueInr != null ? (
+            <div className="bento-value-pill shrink-0">
+              <span className="bento-value-pill__amount">
+                ₹{item.valueInr.toLocaleString("en-IN")}
+              </span>
+              <span className="bento-value-pill__label">
+                {item.valueEstimated ? "est. value" : "value"}
+              </span>
+            </div>
+          ) : null}
         </div>
 
         <h3 className="font-display text-lg font-bold leading-snug tracking-tight text-[color:var(--text-main)]">
@@ -150,7 +155,7 @@ export function WhatYouGetBento() {
       <div className="vc-container">
         <Reveal>
           <h2 className="font-display text-[clamp(32px,5vw,56px)] font-extrabold tracking-[-0.02em] leading-[1.05] max-w-2xl">
-            A high-leverage <span className="accent-text">builder stack</span>
+            What else do you get at the <span className="accent-text">Vibe Coding Workshop?</span>
           </h2>
           <p className="mt-4 text-lg text-[color:var(--text-muted)] max-w-xl">
             Tangible deliverables you can use immediately to build and launch your MLP.
@@ -361,32 +366,7 @@ export function Sponsors() {
 
         <Stagger className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {SPONSORS.map((sponsor) => {
-            const content = (
-              <>
-                {sponsor.logo ? (
-                  <img
-                    src={sponsor.logo}
-                    alt={`${sponsor.name} logo`}
-                    loading="lazy"
-                    className={
-                      sponsor.logoClass ??
-                      "h-8 w-auto max-w-[120px] object-contain opacity-70 transition-opacity group-hover:opacity-100"
-                    }
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                      e.currentTarget.nextElementSibling?.classList.remove("hidden");
-                    }}
-                  />
-                ) : null}
-                <span
-                  className={`text-center text-sm font-semibold leading-tight text-[color:var(--text-muted)] transition-colors group-hover:text-[color:var(--text-main)] ${
-                    sponsor.logo ? "hidden" : ""
-                  }`}
-                >
-                  {sponsor.name}
-                </span>
-              </>
-            );
+            const content = <SponsorTileContent sponsor={sponsor} />;
 
             const tileClass = "sponsor-tile group";
 

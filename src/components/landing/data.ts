@@ -20,9 +20,11 @@ import {
 import hameedPhoto from "@/assets/hameed.jpeg";
 import hariPhoto from "@/assets/hari.png";
 import leoPhoto from "@/assets/leo.png";
-import doingThingsAiLogo from "@/assets/doing-things-ai.png";
+import doingThingsAiLogo from "@/assets/doing-things-ai-community.png";
+import icrewsystemsLogo from "@/assets/icrewsystems-logo.png";
 import lovableIconDark from "@/assets/lovable-icon-bg-dark.png";
-import sayaboutusTextmarkDark from "@/assets/sayaboutus-textmark-dark.png";
+import paperfliteWordmark from "@/assets/paperflite-wordmark.png";
+import sayaboutusWordmark from "@/assets/sayaboutus-wordmark.png";
 
 export type Speaker = {
   ring: "r1" | "r2" | "r3";
@@ -102,7 +104,7 @@ export const WORKSHOP_BENEFITS: Array<{
   title: string;
   desc: string;
   className: string;
-  valueInr: number;
+  valueInr?: number;
   valueEstimated?: boolean;
   logo?: string;
   logoClassName?: string;
@@ -120,8 +122,6 @@ export const WORKSHOP_BENEFITS: Array<{
     icon: Library,
     title: "Prompt Library + Build Stack",
     desc: "Ship faster with proven prompts, 100+ website design references, and ready n8n automations for your Minimum Lovable Product.",
-    valueInr: 12000,
-    valueEstimated: true,
     className: "min-h-[240px]",
   },
   {
@@ -130,32 +130,26 @@ export const WORKSHOP_BENEFITS: Array<{
     desc: "Collect fast, actionable feedback for your product using SayAboutUs credits included with your workshop access.",
     valueInr: 8500,
     valueEstimated: true,
-    logo: sayaboutusTextmarkDark.src,
+    logo: sayaboutusWordmark.src,
     className: "min-h-[260px]",
-    logoClassName: "h-7 w-auto max-w-[112px] object-contain object-left",
+    logoClassName: "h-8 w-auto max-w-[124px] rounded-md object-contain object-left",
   },
   {
     icon: Users,
     title: "AI Builders Network Access",
     desc: "Get unstuck fast in a private Telegram group with active builders sharing feedback, tools, and launch lessons.",
-    valueInr: 18000,
-    valueEstimated: true,
     className: "min-h-[220px]",
   },
   {
     icon: Award,
     title: "Physical Launch Certificate",
     desc: "Show credible proof that you launched. Share digitally verifiable credentials with recruiters, clients, and your network.",
-    valueInr: 6500,
-    valueEstimated: true,
     className: "min-h-[220px]",
   },
   {
     icon: Megaphone,
     title: "Vibe Coder Swag Stickers",
     desc: "Signal that you build in public. Use the sticker pack as social proof and a conversation starter with other makers.",
-    valueInr: 3500,
-    valueEstimated: true,
     className: "min-h-[240px]",
   },
 ];
@@ -300,46 +294,47 @@ export type Sponsor = {
 export const SPONSORS: Sponsor[] = [
   {
     name: "iCrewSystems",
-    logo: "https://logo.clearbit.com/icrewsystems.com",
+    logo: icrewsystemsLogo.src,
+    logoClass: "h-8 w-auto max-w-[148px] object-contain",
     href: "https://icrewsystems.com",
   },
   {
     name: "SayAboutUs",
-    logo: sayaboutusTextmarkDark.src,
-    logoClass: "h-7 w-auto max-w-[140px] object-contain",
+    logo: sayaboutusWordmark.src,
+    logoClass: "h-8 w-auto max-w-[124px] rounded-md object-contain",
     href: "https://sayabout.us",
   },
   {
     name: "Cloud Engine Labs",
-    logo: "https://logo.clearbit.com/cloudenginelabs.com",
-    href: "https://cloudenginelabs.com",
+    href: "https://www.cloudenginelabs.io/",
   },
   {
     name: "HoldYourVoice",
-    logo: "https://logo.clearbit.com/holdyourvoice.com",
-    href: "https://holdyourvoice.com",
+    href: "https://holdyourvoice.com/",
   },
   {
-    name: "AI Builders Network",
-    logo: "https://logo.clearbit.com/aibn.in",
-    href: "https://aibn.in",
+    name: "Wepix AI",
+    href: "https://www.wepix.in/business/ai-agents",
   },
   {
     name: "Proof by Zero Maintenance Engineers",
-    logo: "https://logo.clearbit.com/zeromaintenance.engineers",
-    logoClass: "h-8 w-auto max-w-[160px] object-contain",
-    href: "https://zeromaintenance.engineers",
+    href: "https://proof.zeromaintenanceengineer.in/",
   },
   {
     name: "Paperflite",
-    logo: "https://logo.clearbit.com/paperflite.com",
-    href: "https://paperflite.com",
+    logo: paperfliteWordmark.src,
+    logoClass: "h-8 w-auto max-w-[140px] rounded-md object-contain",
+    href: "https://www.paperflite.com/",
   },
   {
     name: "Doing Things AI",
     logo: doingThingsAiLogo.src,
     logoClass:
-      "h-10 w-auto max-w-[140px] object-contain opacity-90 brightness-0 invert transition-opacity group-hover:opacity-100",
+      "w-[148px] h-auto max-h-14 object-contain opacity-90 transition-opacity group-hover:opacity-100",
+  },
+  {
+    name: "AI Builders Network",
+    href: "https://aibn.in",
   },
 ];
 
