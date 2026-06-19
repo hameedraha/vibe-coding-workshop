@@ -25,6 +25,10 @@ import icrewsystemsLogo from "@/assets/icrewsystems-logo.png";
 import lovableIconDark from "@/assets/lovable-icon-bg-dark.png";
 import paperfliteWordmark from "@/assets/paperflite-wordmark.png";
 import sayaboutusWordmark from "@/assets/sayaboutus-wordmark.png";
+import {
+  LOVABLE_CREDITS_VALUE_INR,
+  SAYABOUTUS_CREDITS_VALUE_INR,
+} from "@/lib/reservation.constants";
 
 export type Speaker = {
   ring: "r1" | "r2" | "r3";
@@ -113,7 +117,7 @@ export const WORKSHOP_BENEFITS: Array<{
     icon: Gift,
     title: "Lovable Credits (300)",
     desc: "Build and iterate without hitting free-plan limits. Equivalent usage would otherwise cost about $20 USD/month for similar capacity.",
-    valueInr: 7000,
+    valueInr: LOVABLE_CREDITS_VALUE_INR,
     logo: lovableIconDark.src,
     className: "min-h-[280px]",
     logoClassName: "h-14 w-14 rounded-xl object-cover ring-1 ring-white/15",
@@ -128,7 +132,7 @@ export const WORKSHOP_BENEFITS: Array<{
     icon: MessageCircle,
     title: "SayAboutUs Credits",
     desc: "Collect fast, actionable feedback for your product using SayAboutUs credits included with your workshop access.",
-    valueInr: 8500,
+    valueInr: SAYABOUTUS_CREDITS_VALUE_INR,
     valueEstimated: true,
     logo: sayaboutusWordmark.src,
     className: "min-h-[260px]",

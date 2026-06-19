@@ -15,7 +15,11 @@ import { D } from "@/components/landing/utils";
 import { SponsorTileContent } from "@/components/landing/SponsorTileContent";
 import { Reveal, Stagger, StaggerItem } from "@/components/landing/motion";
 import { ReserveSeatButton } from "@/components/ReservationWizard";
-import { TICKET_PRICE_INR } from "@/lib/reservation.constants";
+import {
+  PARTNER_CREDITS_TOTAL_VALUE_INR,
+  PARTNER_CREDITS_VALUE_MULTIPLIER,
+  TICKET_PRICE_INR,
+} from "@/lib/reservation.constants";
 
 export function EventDetails() {
   return (
@@ -291,6 +295,20 @@ export function Pricing() {
               </div>
               <p className="mt-3 text-sm text-[color:var(--text-muted)]">
                 Per seat · secure payment via Razorpay · first come, first served
+              </p>
+              <p className="mx-auto mt-5 max-w-lg rounded-2xl border-2 border-[color:var(--accent-vermillion)]/35 bg-[color:var(--accent-vermillion)]/12 px-5 py-4 text-center leading-snug">
+                <span className="font-display text-lg font-extrabold tracking-tight text-[color:var(--text-main)] md:text-xl">
+                  You&apos;re getting{" "}
+                  <span className="accent-text text-2xl md:text-3xl">
+                    {PARTNER_CREDITS_VALUE_MULTIPLIER}×
+                  </span>{" "}
+                  your money&apos;s worth
+                </span>
+                <span className="mt-2 block text-sm font-semibold text-[color:var(--text-muted)] md:text-base">
+                  Just in Lovable + SayAboutUs credits — ₹
+                  {PARTNER_CREDITS_TOTAL_VALUE_INR.toLocaleString("en-IN")} on a ₹
+                  {TICKET_PRICE_INR.toLocaleString("en-IN")} ticket.
+                </span>
               </p>
             </div>
 
